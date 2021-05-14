@@ -24,6 +24,12 @@ under the License.
 // GENERAL STUFF
 ////////////////////////////////////////////////////////////////////////////////
 
+@import url("https://fonts.googleapis.com/css?family=Comfortaa");html {
+  font-family: Comfortaa;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%
+}
+
 html, body {
   color: $main-text;
   padding: 0;
