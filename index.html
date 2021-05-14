@@ -328,9 +328,6 @@
               </ul>
           </li>
           <li>
-            <a href="#d-folders" class="toc-h1 toc-link" data-title="D. Folders">D. Folders</a>
-          </li>
-          <li>
             <a href="#e-documents" class="toc-h1 toc-link" data-title="E. Documents">E. Documents</a>
           </li>
           <li>
@@ -488,7 +485,7 @@ Application URL:</p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
-<p>where 
+<p>where
 * businessProcessId is the id of the business process the status is sent for
 * status is a string describing the state of the business process
 * signers is an array of objects containing information on each signer. 
@@ -529,7 +526,156 @@ Application URL:</p>
 <td>Optional</td>
 </tr>
 </tbody></table>
-<h1 id='d-folders'>D. Folders</h1><h1 id='e-documents'>E. Documents</h1><h1 id='f-business-processes'>F. Business Processes</h1>
+<h4 id='responses'>Responses</h4>
+<blockquote>
+<p>Body for code 201:
+<code>json
+{
+  token: string
+}
+</code></p>
+
+<p>Body for code 4xx:
+<code>json
+{
+  statusCode: number,
+  message: string,
+  error: string
+}
+</code>
+where statusCode is the status code of the error, 
+message is a string describing the cause of error and error is a string describing the type of error.</p>
+
+<p>Body for code 5xx:
+```json
+{
+    statusCode: number,
+    message: string,
+    error: string
+}</p>
+</blockquote>
+<div class="highlight"><pre class="highlight plaintext"><code>
+&gt; where statusCode is the status code of the error, 
+&gt;message is a string describing the cause of error 
+&gt;and error is a string describing the type of error.
+
+Code | Description
+-----|------------
+201 | JWT token has been successfully granted.
+4xx | Errors caused by API consumers. Error codes such as 400, 401, 403 and 404 can be expected if incorrect requests are made to the API.
+5xx | Errors caused by the API provider or its dependencies. Error codes such as 500, 502 and 503 can be expected if there is an issue on the API side.
+
+Child attribute | Description
+----------------|------------
+token | string&lt;br&gt;Base64 string of the encoded JWT token. Refer to JWT payload for more details.
+
+&gt;Sample Request:
+```http
+POST https://beta-api.dedoco.com/api/v1/public/auth/token
+content-type: application/json
+Authorization: Basic &lt;id&gt; &lt;secret&gt;
+{
+   "fileCallback": "https://sample-url.com/file-callback",
+   "statusCallback": "https://sample-url.com/status-callback",
+   "userName": "Jim Lee",
+   "userEmail": "jimmylee@gmail.com"
+}
+</code></pre></div>
+<blockquote>
+<p>Sample Response:
+```http
+HTTP/1.1 201 Created
+{
+  &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJJZCI6IjhiMjIyY2JiLTA2ZTMtNGY5Yi1iNzljLTA4Y2FjMjdlOGZhYSIsInN1YlR5cCI6InB1YmxpYyIsInVzck5hbWUiOiJKaW0gTGVlIiwidXNyRW1haWwiOiJqaW1teWxlZUBnbWFpbC5jb20iLCJ2IjoiMSIsImlhdCI6MTYxNjc0MjMzNSwiZXhwIjoxNjE2Nzg1NTM1fQ....&quot;
+}</p>
+</blockquote>
+<div class="highlight"><pre class="highlight plaintext"><code>
+# D. Folders
+Folders are used to group relevant document(s). A folder can have multiple documents but must contain at least one document. 
+
+## Attributes
+
+&gt;Objects in history attribute:
+```json
+{
+  action: string,
+  actor: {
+    id: string,
+    email: string,
+    name: string
+  },
+  timestamp: date,
+  transaction_hash: string
+}
+</code></pre></div>
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string<br>Unique identifier of the folder.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string<br>Name of the folder set by the creator of the folder. Could be used as a descriptor.</td>
+</tr>
+<tr>
+<td>date_created</td>
+<td>date<br>Time the folder is created. Cannot be changed after the folder is created.</td>
+</tr>
+<tr>
+<td>child_documents</td>
+<td>string[]<br>Array of ids of the documents contained in the folder.</td>
+</tr>
+<tr>
+<td>linked_folders</td>
+<td>string[]<br>Array of ids of linked folders (if any). Linking of folders is an optional functionality to indicate the relevance of the folders to each other but at the same time retaining their segregation as separate folders.</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string<br>Value could be “active”, “closed” or “voided”. “active” indicates that the folder is valid and still in use. “closed” indicates that the folder is valid but not in use at the moment. “voided” indicates that the folder is invalid and no longer in use.</td>
+</tr>
+<tr>
+<td>history</td>
+<td>object[]<br>Array of objects involving changes made to the folder</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>Child Attribute</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>history.action</td>
+<td>string<br>Description of the action recorded in the history attribute.</td>
+</tr>
+<tr>
+<td>history.actor.id</td>
+<td>string<br>User id of the entity that took the action.</td>
+</tr>
+<tr>
+<td>history.actor.email</td>
+<td>string<br>Email address (if any) of the entity that took the action.</td>
+</tr>
+<tr>
+<td>history.actor.name</td>
+<td>string<br>Name (if any) of the entity that took the action.</td>
+</tr>
+<tr>
+<td>history.timestamp</td>
+<td>date<br>Time the action took place.</td>
+</tr>
+<tr>
+<td>history.timestamp_hash</td>
+<td>string<br>Hash of the blockchain transaction updating the data (only if there are any changes in data) on the blockchain due to the action that took place. Can be used to view the transaction details on the blockchain’s explorer.</td>
+</tr>
+</tbody></table>
+<h1 id='e-documents'>E. Documents</h1><h1 id='f-business-processes'>F. Business Processes</h1>
       </div>
       <div class="dark-box">
       </div>
