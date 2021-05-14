@@ -24,10 +24,10 @@ Note for Dedoco Partners integration with API: The data schema and API endpoints
 ### Version History
 Date | Content
 -----| --------
-10 Mar 2021 | Version 0.5 Initial Release
-12 Mar 2021 | Version 0.6 \n Added attributes details
-15 Mar 2021 | Version 0.6a \n Added API Developer Account process
-26 Mar 2021 | Version 0.6b \n Added sample requests and responses
+10 Mar 2021 | Version 0.5<br>Initial Release
+12 Mar 2021 | Version 0.6<br>Added attributes details
+15 Mar 2021 | Version 0.6a<br>Added API Developer Account process
+26 Mar 2021 | Version 0.6b<br>Added sample requests and responses
 
 # A. API Developer Account
 To have access to our Early Access (EA) API Platform, please provide the following information and submit your application request to developers@dedoco.com.
