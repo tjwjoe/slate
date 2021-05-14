@@ -107,7 +107,7 @@ client_secret | string | Secret sent to the client during the onboarding process
 }
 ```
 
-> where 
+> where
 * businessProcessId is the id of the business process the status is sent for
 * status is a string describing the state of the business process
 * signers is an array of objects containing information on each signer. 
@@ -121,6 +121,72 @@ fileCallback | string | Client’s callback url for Dedoco to send updated files
 statusCallback | string | Client’s callback url for Dedoco to notify the client on changes in the statuses of the client’s business processes. | Required
 userName | string | Name of the client’s user the client is requesting the JWT token on behalf of. | Optional
 userEmail | string | Email address of the client’s user the client is requesting. | Optional
+
+#### Responses
+
+>Body for code 201:
+```json
+{
+  token: string
+}
+```
+
+>Body for code 4xx:
+```json
+{
+  statusCode: number,
+  message: string,
+  error: string
+}
+```
+> where statusCode is the status code of the error, 
+message is a string describing the cause of error and error is a string describing the type of error.
+
+>Body for code 5xx:
+```json
+{
+  statusCode: number,
+  message: string,
+  error: string
+}
+
+```
+
+> where statusCode is the status code of the error, 
+>message is a string describing the cause of error 
+>and error is a string describing the type of error.
+
+Code | Description
+-----|------------
+201 | JWT token has been successfully granted.
+4xx | Errors caused by API consumers. Error codes such as 400, 401, 403 and 404 can be expected if incorrect requests are made to the API.
+5xx | Errors caused by the API provider or its dependencies. Error codes such as 500, 502 and 503 can be expected if there is an issue on the API side.
+
+Child attribute | Description
+----------------|------------
+token | string<br>Base64 string of the encoded JWT token. Refer to JWT payload for more details.
+
+>Sample Request:
+```http
+POST https://beta-api.dedoco.com/api/v1/public/auth/token
+content-type: application/json
+Authorization: Basic <id> <secret>
+{
+   "fileCallback": "https://sample-url.com/file-callback",
+   "statusCallback": "https://sample-url.com/status-callback",
+   "userName": "Jim Lee",
+   "userEmail": "jimmylee@gmail.com"
+}
+```
+
+>Sample Response:
+```http
+HTTP/1.1 201 Created
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJJZCI6IjhiMjIyY2JiLTA2ZTMtNGY5Yi1iNzljLTA4Y2FjMjdlOGZhYSIsInN1YlR5cCI6InB1YmxpYyIsInVzck5hbWUiOiJKaW0gTGVlIiwidXNyRW1haWwiOiJqaW1teWxlZUBnbWFpbC5jb20iLCJ2IjoiMSIsImlhdCI6MTYxNjc0MjMzNSwiZXhwIjoxNjE2Nzg1NTM1fQ...."
+}
+
+```
 
 # D. Folders
 
