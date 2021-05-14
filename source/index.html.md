@@ -67,7 +67,7 @@ POST /public/auth/token<br>
 Generates a JWT token.
 
 Authorization:<br>
-Basic <client_id> <client_secret><
+Basic <client_id> <client_secret>
 
 Content-Type:<br>
 application/json
@@ -89,9 +89,7 @@ Request Body:
 }
 ```
 
-> where 
-* businessProcessId is the id of the business process the updated file is sent for. 
-* file is the base64 string of the updated pdf.
+> where businessProcessId is the id of the business process the updated file is sent for and file is the base64 string of the updated pdf.
 
 > The callback url for callbackStatus should accept POST requests with the request body:
 
@@ -126,7 +124,7 @@ userEmail | string | Email address of the client’s user the client is requesti
 
 #### Responses
 
->Body for code 201:
+> Body for code 201:
 
 ```json
 {
@@ -134,7 +132,7 @@ userEmail | string | Email address of the client’s user the client is requesti
 }
 ```
 
->Body for code 4xx:
+> Body for code 4xx:
 
 ```json
 {
@@ -146,7 +144,7 @@ userEmail | string | Email address of the client’s user the client is requesti
 > where statusCode is the status code of the error, 
 message is a string describing the cause of error and error is a string describing the type of error.
 
->Body for code 5xx:
+> Body for code 5xx:
 
 ```json
 {
@@ -171,7 +169,7 @@ Child attribute | Description
 ----------------|------------
 token | string<br>Base64 string of the encoded JWT token. Refer to JWT payload for more details.
 
->Sample Request:
+> Sample Request:
 
 ```http
 POST https://beta-api.dedoco.com/api/v1/public/auth/token
@@ -185,7 +183,7 @@ Authorization: Basic <id> <secret>
 }
 ```
 
->Sample Response:
+> Sample Response:
 
 ```http
 HTTP/1.1 201 Created
@@ -200,7 +198,7 @@ Folders are used to group relevant document(s). A folder can have multiple docum
 
 ## Attributes
 
->Objects in history attribute:
+> Objects in history attribute:
 
 ```json
 {
@@ -233,6 +231,32 @@ history.actor.email | string<br>Email address (if any) of the entity that took t
 history.actor.name | string<br>Name (if any) of the entity that took the action.
 history.timestamp | date<br>Time the action took place.
 history.timestamp_hash | string<br>Hash of the blockchain transaction updating the data (only if there are any changes in data) on the blockchain due to the action that took place. Can be used to view the transaction details on the blockchain’s explorer.
+
+## Endpoints
+
+### 1. Create Folder
+POST /public/folders<br>
+Creates a folder along with documents and business processes. 
+Each new document can only have one new business process attached. 
+Existing folders can be linked to the folder to be created.
+
+Authorization:<br>
+Bearer \<jwt_token>
+
+Content-Type:<br>
+application/json
+
+Header Parameter:
+
+Parameter | Type | Description | Required/Optional
+----------|------|-------------|-------------------
+jwt_token | string | Token obtained by the client through the Get JWT Token endpoint. | Required
+
+Request Body:
+
+Attribute | Type | Description | Required/Optional
+----------|------|-------------|------------------
+
 
 # E. Documents
 
