@@ -145,9 +145,9 @@ message is a string describing the cause of error and error is a string describi
 >Body for code 5xx:
 ```json
 {
-  statusCode: number,
-  message: string,
-  error: string
+    statusCode: number,
+    message: string,
+    error: string
 }
 
 ```
@@ -189,6 +189,42 @@ HTTP/1.1 201 Created
 ```
 
 # D. Folders
+Folders are used to group relevant document(s). A folder can have multiple documents but must contain at least one document. 
+
+## Attributes
+
+>Objects in history attribute:
+```json
+{
+  action: string,
+  actor: {
+    id: string,
+    email: string,
+    name: string
+  },
+  timestamp: date,
+  transaction_hash: string
+}
+```
+
+Attribute | Description
+----------|------------
+id | string<br>Unique identifier of the folder.
+name | string<br>Name of the folder set by the creator of the folder. Could be used as a descriptor.
+date_created | date<br>Time the folder is created. Cannot be changed after the folder is created.
+child_documents | string[]<br>Array of ids of the documents contained in the folder.
+linked_folders | string[]<br>Array of ids of linked folders (if any). Linking of folders is an optional functionality to indicate the relevance of the folders to each other but at the same time retaining their segregation as separate folders.
+status | string<br>Value could be “active”, “closed” or “voided”. “active” indicates that the folder is valid and still in use. “closed” indicates that the folder is valid but not in use at the moment. “voided” indicates that the folder is invalid and no longer in use.
+history | object[]<br>Array of objects involving changes made to the folder
+
+Child Attribute | Description
+----------------|------------
+history.action | string<br>Description of the action recorded in the history attribute.
+history.actor.id | string<br>User id of the entity that took the action.
+history.actor.email | string<br>Email address (if any) of the entity that took the action.
+history.actor.name | string<br>Name (if any) of the entity that took the action.
+history.timestamp | date<br>Time the action took place.
+history.timestamp_hash | string<br>Hash of the blockchain transaction updating the data (only if there are any changes in data) on the blockchain due to the action that took place. Can be used to view the transaction details on the blockchain’s explorer.
 
 # E. Documents
 
