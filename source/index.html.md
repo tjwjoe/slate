@@ -78,19 +78,23 @@ client_secret | string | Secret sent to the client during the onboarding process
 
 #### Request Body:
 
-> The callback url should accept POST requests with the request body 
+> The callback url for fileCallback should accept POST requests with the request body 
 
-```{
+```json
+{
     businessProcessId: string,
     file: string
-}```
+}
+```
 
-> where businessProcessId is the id of the business process the 
-updated file is sent for and file is the base64 string of the updated pdf.
+> where 
+* businessProcessId is the id of the business process the updated file is sent for. 
+* file is the base64 string of the updated pdf.
 
-> The callback url should accept POST requests with the request body: 
+> The callback url for callbackStatus should accept POST requests with the request body:
 
-```{
+```json
+{
   businessProcessId: string,
   status: string,
   signers: {
@@ -100,12 +104,15 @@ updated file is sent for and file is the base64 string of the updated pdf.
     sequence_number: number,
     has_signed: boolean
   }[]
-}```
-> where businessProcessId is the id of the business process the status is sent for, 
-status is a string describing the state of the business process, 
-and signers is an array of objects containing information on each signer. 
-signers.has_signed indicates if the signer has signed. 
-signers.sequence_number exists only if the signers are required to sign in a sequence for the business process.
+}
+```
+
+> where 
+* businessProcessId is the id of the business process the status is sent for
+* status is a string describing the state of the business process
+* signers is an array of objects containing information on each signer. 
+  * signers.has_signed indicates if the signer has signed. 
+  * signers.sequence_number exists only if the signers are required to sign in a sequence for the business process.
 
 
 Attribute | Type | Description | Required/Optional
