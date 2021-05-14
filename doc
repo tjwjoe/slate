@@ -1,0 +1,55 @@
+<h1 id='introduction'>Introduction</h1>
+<p>Welcome to Dedoco Platform API Specifications for Developers!</p>
+
+<p>This document contains the API specifications for integration with the Dedoco Platform. The Dedoco platform manages business and document processes and stores the relevant evidence on blockchain. Dedoco APIs interface between the frontend, application logic and the blockchain smart contracts, allowing the document process to be managed in a trusted and immutable manner.</p>
+
+<p>Note for Dedoco Partners integration with API: The data schema and API endpoints described below are generic for the Dedoco platform. When required (depending on the type of integration), custom endpoints can be provided based on the partner’s processes.</p>
+<h3 id='version-history'>Version History</h3>
+<table><thead>
+<tr>
+<th>Date</th>
+<th>Content</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>10 Mar 2021</td>
+<td>Version 0.5<br>Initial Release</td>
+</tr>
+<tr>
+<td>12 Mar 2021</td>
+<td>Version 0.6<br>Added attributes details</td>
+</tr>
+<tr>
+<td>15 Mar 2021</td>
+<td>Version 0.6a<br>Added API Developer Account process</td>
+</tr>
+<tr>
+<td>26 Mar 2021</td>
+<td>Version 0.6b<br>Added sample requests and responses</td>
+</tr>
+</tbody></table>
+<h1 id='a-api-developer-account'>A. API Developer Account</h1>
+<p>To have access to our Early Access (EA) API Platform, please provide the following information and submit your application request to developers@dedoco.com.</p>
+
+<p>Name of Organization: 
+Business Address: 
+Business Country: 
+Business Website URL: </p>
+
+<p>Contact Person (Full Name): 
+Contact Person (Email): 
+Contact Person (Mobile): </p>
+
+<p>Application Name: 
+Application Description/Use Case: 
+Application Type: [ Internal Use | Public SaaS | Enterprise App | Development | Testing | Others]
+Application URL: </p>
+
+<p>After your application has been reviewed and approved, you will receive an email containing the API credentials to access the Dedoco EA API platform. </p>
+<h1 id='b-sample-api-flows'>B. Sample API Flows</h1><h1 id='c-authentication'>C. Authentication</h1>
+<p>Dedoco uses JWT tokens to allow access to Dedoco’s public API. Clients can request for a JWT token through the Get JWT token endpoint. Dedoco expects for the JWT token to be included in all API requests to the server in a header that looks like the following:</p>
+
+<p>Authorization: Bearer <jwt_token></p>
+
+<p>where jwt_token should be replaced with the obtained JWT token. The payload of the JWT token has the following attributes.</p>
+<h2 id='jwt-payload'>JWT Payload</h2>
