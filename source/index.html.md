@@ -53,10 +53,47 @@ where jwt_token should be replaced with the obtained JWT token. The payload of t
 
 Attribute | Description
 --- | ---
-subId | string<br><br>Id of the subject (i.e. client id).
-subTyp | string<br><br>Type of the subject. “public” in this case.
-usrName | string<br><br>Name of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
-usrEmail | string<br><br>Email address of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
-iat | number<br><br>Unix time the JWT token was issued at.
-exp | number<br><br>Unix time the JWT token will expire by.
-v | number<br><br>Version number of Dedoco’s API that generated the JWT token.
+subId | **string**<br>Id of the subject (i.e. client id).
+subTyp | **string**<br>Type of the subject. “public” in this case.
+usrName | **string**<br>Name of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
+usrEmail | **string**<br>Email address of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
+iat | **number**<br>Unix time the JWT token was issued at.
+exp | **number**<br>Unix time the JWT token will expire by.
+v | **number**<br>Version number of Dedoco’s API that generated the JWT token.
+
+## Endpoints
+### 1. Get JWT Token
+#### POST /public/auth/token
+Generates a JWT token.
+#### Authorization:
+Basic <client_id> <client_secret>
+#### Content-Type:
+application/json
+  
+#### Header Parameters:
+Parameters | Type | Description | Required/Optional
+-----------|------|-------------|------------------
+client_id | string | Id sent to the client during the onboarding process | Required
+client_secret | string | Secret sent to the client during the onboarding process. | Required
+
+#### Request Body:
+Attribute | Type | Description | Required/Optional
+----------|------|-------------|------------------
+fileCallback | string | Client’s callback url for Dedoco to send updated files to. 
+statusCallback | string | 
+userName | string | 
+userEmail | string | 
+
+> The callback url should accept POST requests with the request body 
+```{
+    businessProcessId: string,
+    file: string
+}```
+>where businessProcessId is the id of the business process the updated file is sent for and file is the base64 string of the updated pdf.
+
+
+# D. Folders
+
+# E. Documents
+
+# F. Business Processes
