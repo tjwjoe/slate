@@ -46,6 +46,17 @@ Application Description/Use Case:
 Application Type: [ Internal Use | Public SaaS | Enterprise App | Development | Testing | Others]
 Application URL: 
 
-
 After your application has been reviewed and approved, you will receive an email containing the API credentials to access the Dedoco EA API platform. 
+
+# B. Sample API Flows
+
+# C. Authentication
+
+Dedoco uses JWT tokens to allow access to Dedoco’s public API. Clients can request for a JWT token through the Get JWT token endpoint. Dedoco expects for the JWT token to be included in all API requests to the server in a header that looks like the following:
+
+Authorization: Bearer <jwt_token>
+
+where jwt_token should be replaced with the obtained JWT token. The payload of the JWT token has the following attributes.
+
+## JWT Payload
 
