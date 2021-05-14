@@ -77,20 +77,43 @@ client_id | string | Id sent to the client during the onboarding process | Requi
 client_secret | string | Secret sent to the client during the onboarding process. | Required
 
 #### Request Body:
-Attribute | Type | Description | Required/Optional
-----------|------|-------------|------------------
-fileCallback | string | Client’s callback url for Dedoco to send updated files to. 
-statusCallback | string | 
-userName | string | 
-userEmail | string | 
 
 > The callback url should accept POST requests with the request body 
+
 ```{
     businessProcessId: string,
     file: string
 }```
->where businessProcessId is the id of the business process the updated file is sent for and file is the base64 string of the updated pdf.
 
+> where businessProcessId is the id of the business process the 
+updated file is sent for and file is the base64 string of the updated pdf.
+
+> The callback url should accept POST requests with the request body: 
+
+```{
+  businessProcessId: string,
+  status: string,
+  signers: {
+    id: string,
+    name: string,
+    email: string,
+    sequence_number: number,
+    has_signed: boolean
+  }[]
+}```
+> where businessProcessId is the id of the business process the status is sent for, 
+status is a string describing the state of the business process, 
+and signers is an array of objects containing information on each signer. 
+signers.has_signed indicates if the signer has signed. 
+signers.sequence_number exists only if the signers are required to sign in a sequence for the business process.
+
+
+Attribute | Type | Description | Required/Optional
+----------|------|-------------|------------------
+fileCallback | string | Client’s callback url for Dedoco to send updated files to. | Required 
+statusCallback | string | Client’s callback url for Dedoco to notify the client on changes in the statuses of the client’s business processes. | Required
+userName | string | Name of the client’s user the client is requesting the JWT token on behalf of. | Optional
+userEmail | string | Email address of the client’s user the client is requesting. | Optional
 
 # D. Folders
 
