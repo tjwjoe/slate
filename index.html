@@ -328,6 +328,14 @@
               </ul>
           </li>
           <li>
+            <a href="#d-folders" class="toc-h1 toc-link" data-title="D. Folders">D. Folders</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#attributes" class="toc-h2 toc-link" data-title="Attributes">Attributes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#e-documents" class="toc-h1 toc-link" data-title="E. Documents">E. Documents</a>
           </li>
           <li>
@@ -428,35 +436,24 @@ Application URL:</p>
 <td><strong>number</strong><br>Version number of Dedoco’s API that generated the JWT token.</td>
 </tr>
 </tbody></table>
-<h2 id='endpoints'>Endpoints</h2><h3 id='1-get-jwt-token'>1. Get JWT Token</h3><h4 id='post-public-auth-token'>POST /public/auth/token</h4>
-<p>Generates a JWT token.</p>
-<h4 id='authorization'>Authorization:</h4>
-<p>Basic <client_id> <client_secret></p>
-<h4 id='content-type'>Content-Type:</h4>
-<p>application/json</p>
-<h4 id='header-parameters'>Header Parameters:</h4>
-<table><thead>
-<tr>
-<th>Parameters</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required/Optional</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>client_id</td>
-<td>string</td>
-<td>Id sent to the client during the onboarding process</td>
-<td>Required</td>
-</tr>
-<tr>
-<td>client_secret</td>
-<td>string</td>
-<td>Secret sent to the client during the onboarding process.</td>
-<td>Required</td>
-</tr>
-</tbody></table>
-<h4 id='request-body'>Request Body:</h4>
+<h2 id='endpoints'>Endpoints</h2><h3 id='1-get-jwt-token'>1. Get JWT Token</h3>
+<p>POST /public/auth/token<br>
+Generates a JWT token.</p>
+
+<p>Authorization:<br>
+Basic <client_id> <client_secret>&lt;</p>
+
+<p>Content-Type:<br>
+application/json</p>
+
+<p>Header Parameters:
+Parameters | Type | Description | Required/Optional
+-----------|------|-------------|------------------
+client_id | string | Id sent to the client during the onboarding process | Required
+client_secret | string | Secret sent to the client during the onboarding process. | Required</p>
+
+<p>Request Body:</p>
+
 <blockquote>
 <p>The callback url for fileCallback should accept POST requests with the request body </p>
 </blockquote>
@@ -528,50 +525,76 @@ Application URL:</p>
 </tbody></table>
 <h4 id='responses'>Responses</h4>
 <blockquote>
-<p>Body for code 201:
-<code>json
-{
-  token: string
-}
-</code></p>
-
-<p>Body for code 4xx:
-<code>json
-{
-  statusCode: number,
-  message: string,
-  error: string
-}
-</code>
-where statusCode is the status code of the error, 
+<p>Body for code 201:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="err">token:</span><span class="w"> </span><span class="err">string</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Body for code 4xx:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="err">statusCode:</span><span class="w"> </span><span class="err">number</span><span class="p">,</span><span class="w">
+  </span><span class="err">message:</span><span class="w"> </span><span class="err">string</span><span class="p">,</span><span class="w">
+  </span><span class="err">error:</span><span class="w"> </span><span class="err">string</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>where statusCode is the status code of the error, 
 message is a string describing the cause of error and error is a string describing the type of error.</p>
 
-<p>Body for code 5xx:
-```json
-{
-    statusCode: number,
-    message: string,
-    error: string
-}</p>
+<p>Body for code 5xx:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight plaintext"><code>
-&gt; where statusCode is the status code of the error, 
-&gt;message is a string describing the cause of error 
-&gt;and error is a string describing the type of error.
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">statusCode:</span><span class="w"> </span><span class="err">number</span><span class="p">,</span><span class="w">
+    </span><span class="err">message:</span><span class="w"> </span><span class="err">string</span><span class="p">,</span><span class="w">
+    </span><span class="err">error:</span><span class="w"> </span><span class="err">string</span><span class="w">
+</span><span class="p">}</span><span class="w">
 
-Code | Description
------|------------
-201 | JWT token has been successfully granted.
-4xx | Errors caused by API consumers. Error codes such as 400, 401, 403 and 404 can be expected if incorrect requests are made to the API.
-5xx | Errors caused by the API provider or its dependencies. Error codes such as 500, 502 and 503 can be expected if there is an issue on the API side.
+</span></code></pre></div>
+<blockquote>
+<p>where statusCode is the status code of the error, 
+message is a string describing the cause of error 
+and error is a string describing the type of error.</p>
+</blockquote>
 
-Child attribute | Description
-----------------|------------
-token | string&lt;br&gt;Base64 string of the encoded JWT token. Refer to JWT payload for more details.
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>201</td>
+<td>JWT token has been successfully granted.</td>
+</tr>
+<tr>
+<td>4xx</td>
+<td>Errors caused by API consumers. Error codes such as 400, 401, 403 and 404 can be expected if incorrect requests are made to the API.</td>
+</tr>
+<tr>
+<td>5xx</td>
+<td>Errors caused by the API provider or its dependencies. Error codes such as 500, 502 and 503 can be expected if there is an issue on the API side.</td>
+</tr>
+</tbody></table>
 
-&gt;Sample Request:
-```http
-POST https://beta-api.dedoco.com/api/v1/public/auth/token
+<table><thead>
+<tr>
+<th>Child attribute</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>token</td>
+<td>string<br>Base64 string of the encoded JWT token. Refer to JWT payload for more details.</td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>Sample Request:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight http tab-http"><code><span class="err">POST https://beta-api.dedoco.com/api/v1/public/auth/token
 content-type: application/json
 Authorization: Basic &lt;id&gt; &lt;secret&gt;
 {
@@ -580,34 +603,32 @@ Authorization: Basic &lt;id&gt; &lt;secret&gt;
    "userName": "Jim Lee",
    "userEmail": "jimmylee@gmail.com"
 }
-</code></pre></div>
+</span></code></pre></div>
 <blockquote>
-<p>Sample Response:
-```http
-HTTP/1.1 201 Created
-{
-  &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJJZCI6IjhiMjIyY2JiLTA2ZTMtNGY5Yi1iNzljLTA4Y2FjMjdlOGZhYSIsInN1YlR5cCI6InB1YmxpYyIsInVzck5hbWUiOiJKaW0gTGVlIiwidXNyRW1haWwiOiJqaW1teWxlZUBnbWFpbC5jb20iLCJ2IjoiMSIsImlhdCI6MTYxNjc0MjMzNSwiZXhwIjoxNjE2Nzg1NTM1fQ....&quot;
-}</p>
+<p>Sample Response:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight plaintext"><code>
-# D. Folders
-Folders are used to group relevant document(s). A folder can have multiple documents but must contain at least one document. 
+<div class="highlight"><pre class="highlight http tab-http"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="s">{</span>
+<span class="s">  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJJZCI6IjhiMjIyY2JiLTA2ZTMtNGY5Yi1iNzljLTA4Y2FjMjdlOGZhYSIsInN1YlR5cCI6InB1YmxpYyIsInVzck5hbWUiOiJKaW0gTGVlIiwidXNyRW1haWwiOiJqaW1teWxlZUBnbWFpbC5jb20iLCJ2IjoiMSIsImlhdCI6MTYxNjc0MjMzNSwiZXhwIjoxNjE2Nzg1NTM1fQ...."</span>
+<span class="s">}</span>
 
-## Attributes
-
-&gt;Objects in history attribute:
-```json
-{
-  action: string,
-  actor: {
-    id: string,
-    email: string,
-    name: string
-  },
-  timestamp: date,
-  transaction_hash: string
-}
-</code></pre></div>
+</code></pre></div><h1 id='d-folders'>D. Folders</h1>
+<p>Folders are used to group relevant document(s). A folder can have multiple documents but must contain at least one document. </p>
+<h2 id='attributes'>Attributes</h2>
+<blockquote>
+<p>Objects in history attribute:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="err">action:</span><span class="w"> </span><span class="err">string</span><span class="p">,</span><span class="w">
+  </span><span class="err">actor:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="err">id:</span><span class="w"> </span><span class="err">string</span><span class="p">,</span><span class="w">
+    </span><span class="err">email:</span><span class="w"> </span><span class="err">string</span><span class="p">,</span><span class="w">
+    </span><span class="err">name:</span><span class="w"> </span><span class="err">string</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="err">timestamp:</span><span class="w"> </span><span class="err">date</span><span class="p">,</span><span class="w">
+  </span><span class="err">transaction_hash:</span><span class="w"> </span><span class="err">string</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
 <table><thead>
 <tr>
 <th>Attribute</th>
