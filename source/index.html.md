@@ -63,20 +63,22 @@ v | **number**<br>Version number of Dedoco’s API that generated the JWT token.
 
 ## Endpoints
 ### 1. Get JWT Token
-#### POST /public/auth/token
+POST /public/auth/token<br>
 Generates a JWT token.
-#### Authorization:
-Basic <client_id> <client_secret>
-#### Content-Type:
+
+Authorization:<br>
+Basic <client_id> <client_secret><
+
+Content-Type:<br>
 application/json
   
-#### Header Parameters:
+Header Parameters:
 Parameters | Type | Description | Required/Optional
 -----------|------|-------------|------------------
 client_id | string | Id sent to the client during the onboarding process | Required
 client_secret | string | Secret sent to the client during the onboarding process. | Required
 
-#### Request Body:
+Request Body:
 
 > The callback url for fileCallback should accept POST requests with the request body 
 
@@ -125,6 +127,7 @@ userEmail | string | Email address of the client’s user the client is requesti
 #### Responses
 
 >Body for code 201:
+
 ```json
 {
   token: string
@@ -132,6 +135,7 @@ userEmail | string | Email address of the client’s user the client is requesti
 ```
 
 >Body for code 4xx:
+
 ```json
 {
   statusCode: number,
@@ -143,6 +147,7 @@ userEmail | string | Email address of the client’s user the client is requesti
 message is a string describing the cause of error and error is a string describing the type of error.
 
 >Body for code 5xx:
+
 ```json
 {
     statusCode: number,
@@ -153,8 +158,8 @@ message is a string describing the cause of error and error is a string describi
 ```
 
 > where statusCode is the status code of the error, 
->message is a string describing the cause of error 
->and error is a string describing the type of error.
+message is a string describing the cause of error 
+and error is a string describing the type of error.
 
 Code | Description
 -----|------------
@@ -167,6 +172,7 @@ Child attribute | Description
 token | string<br>Base64 string of the encoded JWT token. Refer to JWT payload for more details.
 
 >Sample Request:
+
 ```http
 POST https://beta-api.dedoco.com/api/v1/public/auth/token
 content-type: application/json
@@ -180,6 +186,7 @@ Authorization: Basic <id> <secret>
 ```
 
 >Sample Response:
+
 ```http
 HTTP/1.1 201 Created
 {
@@ -194,6 +201,7 @@ Folders are used to group relevant document(s). A folder can have multiple docum
 ## Attributes
 
 >Objects in history attribute:
+
 ```json
 {
   action: string,
