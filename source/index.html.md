@@ -41,7 +41,7 @@ After your application has been reviewed and approved, you will receive an email
 
 # B. Sample API Flows
 
-![sample_api_flow](/source/images/sample_api_flows.png)
+<img src="images/sample_api_flows.png">
 
 # C. Authentication
 
