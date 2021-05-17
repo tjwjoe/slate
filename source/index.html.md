@@ -73,19 +73,20 @@ Content-Type:<br>
 application/json
   
 Header Parameters:
+
 Parameters | Type | Description | Required/Optional
 -----------|------|-------------|------------------
 client_id | string | Id sent to the client during the onboarding process | Required
 client_secret | string | Secret sent to the client during the onboarding process. | Required
 
-Request Body:
+**Request Body:**
 
-> The callback url for fileCallback should accept POST requests with the request body 
+> The callback url for fileCallback should accept POST requests with the following request body: 
 
 ```json
 {
-  businessProcessId: string,
-  file: string
+  "businessProcessId": string,
+  "file": string
 }
 ```
 
@@ -95,14 +96,14 @@ Request Body:
 
 ```json
 {
-  businessProcessId: string,
-  status: string,
-  signers: {
-    id: string,
-    name: string,
-    email: string,
-    sequence_number: number,
-    has_signed: boolean
+  "businessProcessId": string,
+  "status": string,
+  "signers": {
+    "id": string,
+    "name": string,
+    "email": string,
+    "sequence_number": number,
+    "has_signed": boolean
   }[]
 }
 ```
@@ -121,13 +122,13 @@ statusCallback | string | Client’s callback url for Dedoco to notify the clien
 userName | string | Name of the client’s user the client is requesting the JWT token on behalf of. | Optional
 userEmail | string | Email address of the client’s user the client is requesting. | Optional
 
-#### Responses
+**Responses**
 
 > Body for code 201:
 
 ```json
 {
-  token: string
+  "token": string
 }
 ```
 
@@ -135,9 +136,9 @@ userEmail | string | Email address of the client’s user the client is requesti
 
 ```json
 {
-  statusCode: number,
-  message: string,
-  error: string
+  "statusCode": number,
+  "message": string,
+  "error": string
 }
 ```
 
@@ -148,9 +149,9 @@ message is a string describing the cause of error and error is a string describi
 
 ```json
 {
-  statusCode: number,
-  message: string,
-  error: string
+  "statusCode": number,
+  "message": string,
+  "error": string
 }
 ```
 
@@ -201,14 +202,14 @@ Folders are used to group relevant document(s). A folder can have multiple docum
 
 ```json
 {
-  action: string,
-  actor: {
-    id: string,
-    email: string,
-    name: string
+  "action": string,
+  "actor": {
+    "id": string,
+    "email": string,
+    "name": string
   },
-  timestamp: date,
-  transaction_hash: string
+  "timestamp": date,
+  "transaction_hash": string
 }
 ```
 
@@ -257,9 +258,9 @@ Request Body:
 
 ```json
 {
-    name: string,
-    file_type: string,
-    document_hash: string
+    "name": string,
+    "file_type": string,
+    "document_hash": string
 }
 ```
 
@@ -267,54 +268,54 @@ Request Body:
 
 ```json
 {
-    type: string,
-    expiration_time: number,
-    document_id: number,
-    is_sequential: boolean,
-    allow_download: boolean,
-    signers: {
-      signer_email: string,
-      signer_name: string,
-      sequence_number: number,
-      esignatures: { 
-        placement: { 
-          page: number, 
-          x: string, 
-          y: string 
+    "type": string,
+    "expiration_time": number,
+    "document_id": number,
+    "is_sequential": boolean,
+    "allow_download": boolean,
+    "signers": {
+      "signer_email": string,
+      "signer_name": string,
+      "sequence_number": number,
+      "esignatures": { 
+        "placement": { 
+          "page": number, 
+          "x": string, 
+          "y": string"
         }, 
-        dimensions: { 
-          width: string, 
-          height: string 
+        "dimensions": { 
+          "width": string, 
+          "height": string 
         } 
       }[],
-      digi_signatures: { 
-        type: string, 
-        placement: { 
-          page: number, 
-          x: string, 
-          y: string 
+      "digi_signatures": { 
+        "type": string, 
+        "placement": { 
+          "page": number, 
+          "x": string, 
+          "y": string 
         }, 
-        dimensions: { 
-          width: string, 
-          height: string 
+        "dimensions": { 
+          "width": string, 
+          "height": string
         } 
       }[],
-      custom_texts: { 
-        descriptor: string, 
-        is_mandatory: boolean, 
-        placement: { 
-          page: number, 
-          x: string, 
-          y: string 
+      "custom_texts": { 
+        "descriptor": string, 
+        "is_mandatory": boolean, 
+        "placement": { 
+          "page": number, 
+          "x": string, 
+          "y": string"
         }, 
-        dimensions: { 
-          width: string, 
-          height: string 
+        "dimensions": { 
+          "width": string, 
+          "height": string 
         } 
       }[]
     }[],
-    completion_requirement: {
-      min_number: number
+    "completion_requirement": {
+      "min_number": number
     }
 }
 ```
@@ -376,17 +377,17 @@ Responses:
 
 ```json
 {
-  folder: Folder,
-  documents: Document[],
-  businessProcesses: BusinessProcess[],
-  links: {
-    documentId: string,
-    documentName: string,
-    businessProcessId: string,
-    signerId: string,
-    signerName: string,
-    signerEmail: string,
-    link: string
+  "folder": Folder,
+  "documents": Document[],
+  "businessProcesses": BusinessProcess[],
+  "links": {
+    "documentId": string,
+    "documentName": string,
+    "businessProcessId": string,
+    "signerId": string,
+    "signerName": string,
+    "signerEmail": string,
+    "link": string
   }[]
 }
 ```
@@ -395,9 +396,9 @@ Responses:
 
 ```json
 {
-  statusCode: number,
-  message: string,
-  error: string 
+  "statusCode": number,
+  "message": string,
+  "error": string 
 }
 ```
 
@@ -409,9 +410,9 @@ and error is a string describing the type of error.
 
 ```json
 {
-  statusCode: number,
-  message: string,
-  error: string 
+  "statusCode": number,
+  "message": string,
+  "error": string 
 }
 ```
 
@@ -429,13 +430,13 @@ Code | Description
 
 ```json
 {
-  documentId: string, 
-  documentName: string,
-  businessProcessId: string,
-  signerId: string,
-  signerName: string,
-  signerEmail: string,
-  link: string
+  "documentId": string, 
+  "documentName": string,
+  "businessProcessId": string,
+  "signerId": string,
+  "signerName": string,
+  "signerEmail": string,
+  "link": string
 }
 ```
 
@@ -644,7 +645,6 @@ HTTP/1.1 201 Created
       {
         "action": "add Document with id: 605d89b600f7ab4d00541d2e",
         "actor": {
-
           "id": "8b222cbb-06e3-4f9b-b79c-08cac27e8faa",
           "email": "jimmylee@gmail.com",
           "name": "Jim Lee"
@@ -655,7 +655,6 @@ HTTP/1.1 201 Created
       {
         "action": "add Document with id: 605d89b600f7ab4d00541d2f",
         "actor": {
-
           "id": "8b222cbb-06e3-4f9b-b79c-08cac27e8faa",
           "email": "jimmylee@gmail.com",
           "name": "Jim Lee"

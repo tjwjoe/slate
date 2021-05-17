@@ -10,6 +10,7 @@ module Rouge
         name 'monokai.sublime.slate'
 
         palette :black          => '#000000'
+        palette :light_blue     => '#babeff'
         palette :bright_green   => '#a6e22e'
         palette :bright_pink    => '#f92672'
         palette :carmine        => '#960050'
@@ -42,7 +43,7 @@ module Rouge
               Comment,                          :fg => :dimgrey
         style Error,
               Generic::Error,
-              Generic::Traceback,               :fg => :carmine
+              Generic::Traceback,               :fg => :light_blue
         style Generic::Deleted,
               Generic::Inserted,
               Generic::Emph,                    :fg => :dark
