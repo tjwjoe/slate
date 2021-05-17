@@ -65,7 +65,7 @@ v | number<br>Version number of Dedoco’s API that generated the JWT token.
 
 ## Endpoints
 ### 1. Get JWT Token
-POST /public/auth/token<br>
+POST /public/auth/token<br> HTTP/1.1
 Generates a JWT token.
 
 Authorization:<br>
@@ -173,13 +173,17 @@ Child attribute | Description
 ----------------|------------
 token | string<br>Base64 string of the encoded JWT token. Refer to JWT payload for more details.
 
-> Sample Request:
+> Sample Request Header:
 
 ```http
-POST https://beta-api.dedoco.com/api/v1/public/auth/token
+POST https://beta-api.dedoco.com/api/v1/public/auth/token HTTP/1.1
 content-type: application/json
 Authorization: Basic <id> <secret>
+```
 
+> Sample Request Body:
+
+```json
 {
    "fileCallback": "https://sample-url.com/file-callback",
    "statusCallback": "https://sample-url.com/status-callback",
@@ -188,15 +192,23 @@ Authorization: Basic <id> <secret>
 }
 ```
 
-> Sample Response:
+> Sample Response Header:
 
 ```http
 HTTP/1.1 201 Created
+```
+
+> Sample Request Body
+
+```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJJZCI6IjhiMjIyY2JiLTA2ZTMtNGY5Yi1iNzljLTA4Y2FjMjdlOGZhYSIsInN1YlR5cCI6InB1YmxpYyIsInVzck5hbWUiOiJKaW0gTGVlIiwidXNyRW1haWwiOiJqaW1teWxlZUBnbWFpbC5jb20iLCJ2IjoiMSIsImlhdCI6MTYxNjc0MjMzNSwiZXhwIjoxNjE2Nzg1NTM1fQ...."
 }
-
 ```
+
+<aside class ="success">
+A sample request and response are given on the right.
+</aside>
 
 # D. Folders
 Folders are used to group relevant document(s). A folder can have multiple documents but must contain at least one document. 
@@ -240,7 +252,7 @@ history.timestamp_hash | string<br>Hash of the blockchain transaction updating t
 ## Endpoints
 
 ### 1. Create Folder
-`POST /public/folders`<br>
+`POST /public/folders`<br> HTTP/1.1
 Creates a folder along with documents and business processes. 
 Each new document can only have one new business process attached. 
 Existing folders can be linked to the folder to be created.
@@ -615,13 +627,17 @@ links.signerName | string<br>Name of the signer the link attribute in the same o
 links.signerEmail | string<br>Email of the signer the link attribute in the same object is for.
 links.link | string<br>The base URL of the signing link for the specified signer. To complete the signing link, append the base64 encoding of the file retrieval URL for Dedoco to retrieve the relevant file to sign on. The file retrieval URL should accept a GET request for Dedoco to retrieve the relevant file and should return a JSON object {file: string} where file is the base64 string of the retrieved pdf.<br>For example, if the file retrieval URL is   “https://www.sample-url.com/path/file-id”, the base64 encoding would be “aHR0cHM6Ly93d3cuc2FtcGxlLXVybC5jb20vcGF0aC9maWxlLWlkIA==”. Appending “aHR0cHM6Ly93d3cuc2FtcGxlLXVybC5jb20vcGF0aC9maWxlLWlkIA==” to the base URL obtained from this request would complete the signing link. Note that the file retrieval URL appended should always be retrieving the most up-to-date (i.e. with signatures if there were previous signers) pdf. In the case of a business process with a signing sequence defined, the client should send out the links in the same sequence (even though Dedoco prevents a signer from signing before the previous signer has signed) and make sure that the appended URL retrieves the latest pdf with signatures (if any). And in the case of a business process where signers are allowed to sign simultaneously or in any order, the client can send out the links to all the signers at the same time but should make sure that the appended URL always retrieves the latest pdf with signatures (if any) so that the signers will receive the right pdf to sign on.
 
-> Sample Request: 
+> Sample Request Header:
 
 ```http
-POST https://beta-api.dedoco.com/api/v1/public/folders
+POST https://beta-api.dedoco.com/api/v1/public/folders HTTP/1.1
 Authorization: Bearer <token>
 content-type: application/json
+```
 
+> Sample Request Body:
+
+```json
 {
    "folder_name": "Test Folder",
    "date_created": 1616383852,
@@ -778,10 +794,15 @@ content-type: application/json
 
 ```
 
-> Sample Response: 
+> Sample Response Header: 
 
 ```http
 HTTP/1.1 201 Created
+```
+
+> Sample Response Body:
+
+```json
 {
   "folder": {
     "id": "605d89b600f7ab4d00541d2d",
