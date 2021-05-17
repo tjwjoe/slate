@@ -41,25 +41,27 @@ After your application has been reviewed and approved, you will receive an email
 
 # B. Sample API Flows
 
+![sample_api_flow](/source/images/sample_api_flows.png)
+
 # C. Authentication
 
 Dedoco uses JWT tokens to allow access to Dedoco’s public API. Clients can request for a JWT token through the Get JWT token endpoint. Dedoco expects for the JWT token to be included in all API requests to the server in a header that looks like the following:
 
 Authorization: Bearer \<jwt_token>
 
-where jwt_token should be replaced with the obtained JWT token. The payload of the JWT token has the following attributes.
+where jwt_token should be replaced with the obtained JWT token. The following section describes the attributes of the JWT token.
 
 ## JWT Payload
 
 Attribute | Description
 --- | ---
-subId | **string**<br>Id of the subject (i.e. client id).
-subTyp | **string**<br>Type of the subject. “public” in this case.
-usrName | **string**<br>Name of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
-usrEmail | **string**<br>Email address of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
-iat | **number**<br>Unix time the JWT token was issued at.
-exp | **number**<br>Unix time the JWT token will expire by.
-v | **number**<br>Version number of Dedoco’s API that generated the JWT token.
+subId | string<br>Id of the subject (i.e. client id).
+subTyp | string<br>Type of the subject. “public” in this case.
+usrName | string<br>Name of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
+usrEmail | string<br>Email address of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
+iat | number<br>Unix time the JWT token was issued at.
+exp | number<br>Unix time the JWT token will expire by.
+v | number<br>Version number of Dedoco’s API that generated the JWT token.
 
 ## Endpoints
 ### 1. Get JWT Token
@@ -90,7 +92,8 @@ client_secret | string | Secret sent to the client during the onboarding process
 }
 ```
 
-> where businessProcessId is the id of the business process the updated file is sent for and file is the base64 string of the updated pdf.
+> where **businessProcessId** is the id of the business process the updated file is sent for and<br>
+**file** is the base64 string of the updated pdf.
 
 > The callback url for callbackStatus should accept POST requests with the request body:
 
@@ -108,11 +111,11 @@ client_secret | string | Secret sent to the client during the onboarding process
 }
 ```
 
-> where businessProcessId is the id of the business process the status is sent for,
-status is a string describing the state of the business process,
-signers is an array of objects containing information on each signer, 
-signers.has_signed indicates if the signer has signed, and
-signers.sequence_number exists only if the signers are required to sign in a sequence for the business process.
+> where **businessProcessId** is the id of the business process the status is sent for,<br>
+**status** is a string describing the state of the business process,<br>
+**signers** is an array of objects containing information on each signer,<br> 
+**signers.has_signed** indicates if the signer has signed, and<br>
+**signers.sequence_number** exists only if the signers are required to sign in a sequence for the business process.
 
 
 Attribute | Type | Description | Required/Optional
@@ -122,7 +125,7 @@ statusCallback | string | Client’s callback url for Dedoco to notify the clien
 userName | string | Name of the client’s user the client is requesting the JWT token on behalf of. | Optional
 userEmail | string | Email address of the client’s user the client is requesting. | Optional
 
-**Responses**
+**Responses:**
 
 > Body for code 201:
 
@@ -132,7 +135,7 @@ userEmail | string | Email address of the client’s user the client is requesti
 }
 ```
 
-> Body for code 4xx:
+> Response body for code 4xx:
 
 ```json
 {
@@ -142,10 +145,11 @@ userEmail | string | Email address of the client’s user the client is requesti
 }
 ```
 
-> where statusCode is the status code of the error, 
-message is a string describing the cause of error and error is a string describing the type of error.
+> where **statusCode** is the status code of the error,<br>
+**message** is a string describing the cause of error and<br> 
+**error** is a string describing the type of error.
 
-> Body for code 5xx:
+> Response body for code 5xx:
 
 ```json
 {
@@ -155,9 +159,9 @@ message is a string describing the cause of error and error is a string describi
 }
 ```
 
-> where statusCode is the status code of the error, 
-message is a string describing the cause of error 
-and error is a string describing the type of error.
+> where **statusCode** is the status code of the error,<br>
+**message** is a string describing the cause of error and<br>
+**error** is a string describing the type of error.
 
 Code | Description
 -----|------------
@@ -175,6 +179,7 @@ token | string<br>Base64 string of the encoded JWT token. Refer to JWT payload f
 POST https://beta-api.dedoco.com/api/v1/public/auth/token
 content-type: application/json
 Authorization: Basic <id> <secret>
+
 {
    "fileCallback": "https://sample-url.com/file-callback",
    "statusCallback": "https://sample-url.com/status-callback",
@@ -198,7 +203,17 @@ Folders are used to group relevant document(s). A folder can have multiple docum
 
 ## Attributes
 
-> Objects in history attribute:
+Attribute | Description
+----------|------------
+id | string<br>Unique identifier of the folder.
+name | string<br>Name of the folder set by the creator of the folder. Could be used as a descriptor.
+date_created | date<br>Time the folder is created. Cannot be changed after the folder is created.
+child_documents | string[]<br>Array of ids of the documents contained in the folder.
+linked_folders | string[]<br>Array of ids of linked folders (if any). Linking of folders is an optional functionality to indicate the relevance of the folders to each other but at the same time retaining their segregation as separate folders.
+status | string<br>Value could be “active”, “closed” or “voided”. “active” indicates that the folder is valid and still in use. “closed” indicates that the folder is valid but not in use at the moment. “voided” indicates that the folder is invalid and no longer in use.
+history | object[]<br>Array of objects involving changes made to the folder
+
+> A history object:
 
 ```json
 {
@@ -213,16 +228,6 @@ Folders are used to group relevant document(s). A folder can have multiple docum
 }
 ```
 
-Attribute | Description
-----------|------------
-id | string<br>Unique identifier of the folder.
-name | string<br>Name of the folder set by the creator of the folder. Could be used as a descriptor.
-date_created | date<br>Time the folder is created. Cannot be changed after the folder is created.
-child_documents | string[]<br>Array of ids of the documents contained in the folder.
-linked_folders | string[]<br>Array of ids of linked folders (if any). Linking of folders is an optional functionality to indicate the relevance of the folders to each other but at the same time retaining their segregation as separate folders.
-status | string<br>Value could be “active”, “closed” or “voided”. “active” indicates that the folder is valid and still in use. “closed” indicates that the folder is valid but not in use at the moment. “voided” indicates that the folder is invalid and no longer in use.
-history | object[]<br>Array of objects involving changes made to the folder
-
 Child Attribute | Description
 ----------------|------------
 history.action | string<br>Description of the action recorded in the history attribute.
@@ -235,16 +240,16 @@ history.timestamp_hash | string<br>Hash of the blockchain transaction updating t
 ## Endpoints
 
 ### 1. Create Folder
-POST /public/folders<br>
+`POST /public/folders`<br>
 Creates a folder along with documents and business processes. 
 Each new document can only have one new business process attached. 
 Existing folders can be linked to the folder to be created.
 
 Authorization:<br>
-Bearer \<jwt_token>
+`Bearer \<jwt_token>`
 
 Content-Type:<br>
-application/json
+`application/json`
 
 Header Parameter:
 
@@ -254,7 +259,7 @@ jwt_token | string | Token obtained by the client through the Get JWT Token endp
 
 Request Body:
 
-> Object details for documents attribute:
+> A **documents** object:
 
 ```json
 {
@@ -264,7 +269,7 @@ Request Body:
 }
 ```
 
-> Object details for business_processes attribute:
+> A **business_processes** object:
 
 ```json
 {
@@ -324,9 +329,165 @@ Attribute | Type | Description | Required/Optional
 ----------|------|-------------|------------------
 folder_name | string | Name of the folder. Set by the folder's creator. | Required
 date_created | date | Date of folder creation in Unix time. | Required
-documents | object[] | Array of objects --> | Required
+documents | object[] | Array of objects, represented on the right. More details are given below. | Required
 linked_folders | string[] | Array of ids of linked folders (if any). | Optional (Use an empty array if not used)
-business_processes | object[] | Array of objects --> | Optional (Use an empty array if not used)
+business_processes | object[] | Array of objects, represented on the right. More details are given below. | Optional (Use an empty array if not used)
+
+> A **business_processes.signers** object
+
+```json
+{
+    "signer_email": string,
+    "signer_name": string,
+    "sequence_number": number,
+    "esignatures": { 
+        "placement": {
+            "page": number, 
+            "x": string, 
+            "y": string 
+        }, 
+        "dimensions": { 
+            "width": string, 
+            "height": string 
+        } 
+    }[],
+    "digi_signatures": { 
+        "type": string, 
+        "placement": { 
+            "page": number, 
+            "x": string, 
+            "y": string 
+        }, 
+        "dimensions": { 
+            "width": string, 
+            "height": string 
+        } 
+    }[],
+    "custom_texts": { 
+        "descriptor": string, 
+        "is_mandatory": boolean, 
+        "placement": { 
+            "page": number, 
+            "x": string, 
+            "y": string 
+        }, 
+        "dimensions": { 
+            "width": string, 
+            "height": string 
+        } 
+    }[]
+}
+```
+
+> A **business_processes.signers.esignatures** object
+
+```json
+{ 
+    "placement": { 
+        "page": number, 
+        "x": string, 
+        "y": string 
+    }, 
+    "dimensions": { 
+        "width": string, 
+        "height": string 
+    } 
+}
+```
+
+> A **business_processes.signers.esignatures.placement** object:
+
+```json
+{ 
+    "page": number, 
+    "x": string, 
+    "y": string 
+} 
+```
+
+> A **business_processes.signers.esignatures.dimensions** object:
+
+```json
+{ 
+    "width": string, 
+    "height": string 
+} 
+```
+
+> A **business_processes.signers.digi_signatures** object:
+
+```json
+{ 
+    "type": string,
+    "placement": { 
+        "page": number, 
+        "x": string, 
+        "y": string 
+    }, 
+    "dimensions": { 
+        "width": string, 
+        "height": string 
+    } 
+}
+```
+
+> A **business_processes.signers.digi_signatures.placement** object:
+
+```json
+{ 
+    "page": number,
+    "x": string, 
+    "y": string 
+}
+```
+
+> A **business_processes.signers.digi_signatures.dimensions** object:
+
+
+```json
+{ 
+    "width": string, 
+    "height": string 
+} 
+```
+
+> A **business_processes.signers.custom_texts** object:
+
+```json
+{
+    "descriptor": string,
+    "is_mandatory": boolean,
+    "placement": { 
+        "page": number, 
+        "x": string, 
+        "y": string 
+    },
+    "dimensions": { 
+        "width": string, 
+        "height": string 
+    }
+}
+```
+
+> A **business_processes.signers.custom_texts.placement** object:
+
+
+```json
+{ 
+    "page": number, 
+    "x": string, 
+    "y": string
+}
+```
+
+> A **business_processes.signers.custom_texts.dimensions** object:
+
+```json
+{ 
+    "width": string, 
+    "height": string 
+}
+```
 
 Child attribute | Description
 ----------------|------------
@@ -338,42 +499,42 @@ business_processes.expiration_time | number<br>Expiration time of the business p
 business_processes.document_id | number<br>Index of the document in this request body’s documents attribute to attach the business process to.
 business_processes.is_sequential | boolean<br>Boolean indicating if the business process requires signers to sign in a sequence. Note that signers have to sign in a sequence if digital signatures are used.
 business_processes.allow_download | boolean<br>Boolean indicating if the signers are allowed to manually download the signed pdf on Dedoco’s signing app after signing.
-business_processes.signers | object[]<br>
+business_processes.signers | object[]<br>Array of objects. The structure of an object is given on the right.
 business_processes.signers.signer_email | string<br>Email address of the signer.
 business_processes.signers.signer_name | string<br>Name of the signer.
 business_processes.signers.sequence_number | number<br>Sequence number of the signer if the business process requires signers to sign in a sequence. Starts from 1. 0 is used if there is no sequence.
-business_processes.signers<br>.esignatures | object[]<br>
-business_processes.signers<br>.esignatures.placement | object<br>
+business_processes.signers<br>.esignatures | object[]<br>Array of objects. The structure of an object is given on the right.<br>Each object represents an electronic signature placeholder. An electronic signature, as opposed to a digital signature, is an image that is drawn, typed or uploaded by the signer. Use an empty array to indicate that electronic signature is not used.<br>Note that due to the nature of how a digital signature is computed, all signers of the same business process can only and have to sign either using electronic signatures or digital signatures.
+business_processes.signers<br>.esignatures.placement | object<br>Object containing information on where the electronic signature is placed on the file.
 business_processes.signers<br>.esignatures.placement.page | number<br>Page number of the page on which the electronic signature is placed. Starts from 1.
-business_processes.signers<br>.esignatures.placement.x | string<br>Float string which indicates the horizontal distance the top left corner of the electronic signature box is from the left edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the width of the page. For example, to set the placement of the electronic signature box’s top left corner to the center of the page horizontally, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the width of the electronic signature box for the entire signature box to be contained within the page) is strictly less than 1.
-business_processes.signers<br>.esignatures.placement.y | string<br>Float string which indicates the vertical distance the top left corner of the electronic signature box is from the top edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the height of the page. For example, to set the placement of the electronic signature box’s top left corner to the center of the page vertically, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the height of the electronic signature box for the entire signature box to be contained within the page) is strictly less than 1.
-business_processes.signers<br>.esignatures.dimensions | object<br>
-business_processes.signers<br>.esignatures.dimensions.width | string<br>Float string which indicates the width of the electronic signature box. The represented float value is a fraction (in decimal form) whose denominator is the width of the page. For example, to set the width of the electronic signature box to be half of the page’s width, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the x-coordinate of the electronic signature box for the entire signature box to be contained within the page) is less than 1. Note that currently, even though this value will be validated and stored, the stored value will not be used by Dedoco’s signing app because electronic signatures are displayed in a fixed height:width ratio (1:2 specifically) using business_processes.signers.esignatures.dimensions.height as reference.
-business_processes.signers<br>.esignatures.dimensions.height | string<br>Float string which indicates the height of the electronic signature box. The represented float value is a fraction (in decimal form) whose denominator is the height of the page. For example, to set the height of the electronic signature box to be half of the page’s height, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the y-coordinate of the electronic signature box for the entire signature box to be contained within the page) is less than 1.
-business_processes.signers<br>.digi_signatures | object[]<br>
+business_processes.signers<br>.esignatures.placement.x | string<br>Float string which indicates the horizontal distance the top left corner of the electronic signature box is from the left edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the placement of the electronic signature box’s top left corner to the center of the page horizontally, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the width of the electronic signature box for the entire signature box to be contained within the page) is strictly less than 1.
+business_processes.signers<br>.esignatures.placement.y | string<br>Float string which indicates the vertical distance the top left corner of the electronic signature box is from the top edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the placement of the electronic signature box’s top left corner to the center of the page vertically, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the height of the electronic signature box for the entire signature box to be contained within the page) is strictly less than 1.
+business_processes.signers<br>.esignatures.dimensions | object<br>Object containing information on the size of the electronic signature on the file.
+business_processes.signers<br>.esignatures.dimensions.width | string<br>Float string which indicates the width of the electronic signature box. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the width of the electronic signature box to be half of the page’s width, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the x-coordinate of the electronic signature box for the entire signature box to be contained within the page) is less than 1.<br>Note that currently, even though this value will be validated and stored, the stored value will not be used by Dedoco’s signing app because electronic signatures are displayed in a fixed height:width ratio (1:2 specifically) using business_processes.signers.esignatures.dimensions.height as reference.
+business_processes.signers<br>.esignatures.dimensions.height | string<br>Float string which indicates the height of the electronic signature box. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the height of the electronic signature box to be half of the page’s height, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the y-coordinate of the electronic signature box for the entire signature box to be contained within the page) is less than 1.
+business_processes.signers<br>.digi_signatures | object[]<br>Array of objects. The structure of an object is given on the right.<br>Each object represents a digital signature placeholder. A digital signature, as opposed to an electronic signature, is a signature derived cryptographically using the signer’s credentials. Use an empty array to indicate that digital signature is not used. Note that due to the nature of how a digital signature is computed, all signers of the same business process can only and have to sign either using electronic signatures or digital signatures.
 business_processes.signers<br>.digi_signatures.type | string<br>Values could be “ndi” or “blockchain”. Currently, only “ndi” is supported. Note that only one “ndi” signature can be added for a signer.
-business_processes.signers<br>.digi_signatures.placement | object<br>
+business_processes.signers<br>.digi_signatures.placement | object<br>Object containing information on where the digital signature is placed on the file.
 business_processes.signers<br>.digi_signatures.placement.page | number<br>Page number of the page on which the digital signature is placed. Starts from 1.
 business_processes.signers<br>.digi_signatures.placement.x | string<br>Float string which indicates the horizontal distance the top left corner of the digital signature box is from the left edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the width of the page. For example, to set the placement of the electronic signature box’s top left corner to the center of the page horizontally, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the width of the electronic signature box for the entire signature box to be contained within the page) is strictly less than 1.
 business_processes.signers<br>.digi_signatures.placement.y | string<br>Float string which indicates the vertical distance the top left corner of the electronic signature box is from the top edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the height of the page. For example, to set the placement of the electronic signature box’s top left corner to the center of the page vertically, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the height of the electronic signature box for the entire signature box to be contained within the page) is strictly less than 1.
-business_processes.signers<br>.digi_signatures.dimensions | object<br>
-business_processes.signers<br>.digi_signatures.dimensions.width | string<br>Float string which indicates the width of the digital signature box. The represented float value is a fraction (in decimal form) whose denominator is the width of the page. For example, to set the width of the digital signature box to be half of the page’s width, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the x-coordinate of the digital signature box for the entire signature box to be contained within the page) is less than 1. Note that currently, even though this value will be stored, the stored value will not be used by Dedoco’s signing app because only “ndi” digital signatures are supported and their sizes are fixed.
-business_processes.signers<br>.digi_signatures.dimensions.height | string<br>Float string which indicates the height of the digital signature box. The represented float value is a fraction (in decimal form) whose denominator is the height of the page. For example, to set the height of the digital signature box to be half of the page’s height, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the y-coordinate of the digital signature box for the entire signature box to be contained within the page) is less than 1. Note that currently, even though this value will be stored, the stored value will not be used by Dedoco’s signing app because only “ndi” digital signatures are supported and their sizes are fixed.
-business_processes.signers<br>.custom_texts | object[]<br>
-business_processes.signers<br>.custom_texts.descriptor | string<br>Brief description of custom text. Helps the signer know what to fill into the custom text field. If any of the special values is used, the custom text field will be displayed in the signing app differently from a typical custom text field. Currently, the special values are the strings “Actual Date” and “Custom Date”. If “Actual Date” is used, the signing app will generate the signer’s current date within the custom text box when the signer accesses the signing link (i.e. the signer does not get to edit the value of the custom text). If “Custom Date” is used, the signing app will display a calendar for the signer to choose a date.
+business_processes.signers<br>.digi_signatures.dimensions | object<br>Object containing information on the size of the digital signature on the file.
+business_processes.signers<br>.digi_signatures.dimensions.width | string<br>Float string which indicates the width of the digital signature box. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the width of the digital signature box to be half of the page’s width, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the x-coordinate of the digital signature box for the entire signature box to be contained within the page) is less than 1.<br>Note that currently, even though this value will be stored, the stored value will not be used by Dedoco’s signing app because only “ndi” digital signatures are supported and their sizes are fixed.
+business_processes.signers<br>.digi_signatures.dimensions.height | string<br>Float string which indicates the height of the digital signature box. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the height of the digital signature box to be half of the page’s height, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the y-coordinate of the digital signature box for the entire signature box to be contained within the page) is less than 1.<br>Note that currently, even though this value will be stored, the stored value will not be used by Dedoco’s signing app because only “ndi” digital signatures are supported and their sizes are fixed.
+business_processes.signers<br>.custom_texts | object[]<br>Array of objects. The structure of an object is given on the right. Note that due to the nature of how a digital signature is computed, there cannot be custom texts if the business process has more than one signers and “ndi” digital signatures are used (i.e. an empty array is expected).
+business_processes.signers<br>.custom_texts.descriptor | string<br>Brief description of custom text. Helps the signer know what to fill into the custom text field. If any of the special values are used, the custom text field will be displayed in the signing app differently from a typical custom text field. Currently, the special values are the strings “Actual Date” and “Custom Date”. If “Actual Date” is used, the signing app will generate the signer’s current date within the custom text box when the signer accesses the signing link (i.e. the signer does not get to edit the value of the custom text). If “Custom Date” is used, the signing app will display a calendar for the signer to choose a date.
 business_processes.signers<br>.custom_texts.is_mandatory | boolean<br>Boolean indicating whether or not filling in the custom text is mandatory.
-business_processes.signers<br>.custom_texts.placement | object<br>
+business_processes.signers<br>.custom_texts.placement | object<br>Object containing information on where the custom text is placed on the file.
 business_processes.signers<br>.custom_texts.placement.page | number<br>Page number of the page on which the custom text is placed. Starts from 1.
-business_processes.signers<br>.custom_texts.placement.x	| string<br>Float string which indicates the horizontal distance the top left corner of the custom text box is from the left edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the width of the page. For example, to set the placement of the custom text box’s top left corner to the center of the page horizontally, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the width of the custom text box for the entire box to be contained within the page) is strictly less than 1.
-business_processes.signers<br>.custom_texts.placement.y | string<br>Float string which indicates the vertical distance the top left corner of the custom text box is from the top edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the height of the page. For example, to set the placement of the custom text box’s top left corner to the center of the page vertically, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the height of the custom text box for the entire box to be contained within the page) is strictly less than 1.
-business_processes.signers<br>.custom_texts.dimensions | object<br>
-business_processes.signers<br>.custom_texts.dimensions.width | string<br>Float string which indicates the width of the custom text box. The represented float value is a fraction (in decimal form) whose denominator is the width of the page. For example, to set the width of the custom text box to be half of the page’s width, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the x-coordinate of the custom text box for the entire box to be contained within the page) is less than 1. Note that if the business_processes.signers.custom_texts.descriptor is “Actual Date” or “Custom Date”, even though this value will be validated and stored, the stored value will not be used by Dedoco’s signing app because “Actual Date”s and “Custom Date”s are displayed in a fixed height:width ratio (1:4 specifically) using business_processes.signers.custom_texts.dimensions.height as reference.
-business_processes.signers<br>.custom_texts.dimensions.height | string<br>Float string which indicates the height of the custom text box. The represented float value is a fraction (in decimal form) whose denominator is the height of the page. For example, to set the height of the custom text box to be half of the page’s height, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the y-coordinate of the custom text box for the entire box to be contained within the page) is less than 1.
+business_processes.signers<br>.custom_texts.placement.x	| string<br>Float string which indicates the horizontal distance the top left corner of the custom text box is from the left edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the placement of the custom text box’s top left corner to the center of the page horizontally, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the width of the custom text box for the entire box to be contained within the page) is strictly less than 1.
+business_processes.signers<br>.custom_texts.placement.y | string<br>Float string which indicates the vertical distance the top left corner of the custom text box is from the top edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the placement of the custom text box’s top left corner to the center of the page vertically, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the height of the custom text box for the entire box to be contained within the page) is strictly less than 1.
+business_processes.signers<br>.custom_texts.dimensions | object<br>Object containing information on the size of the custom text on the file.
+business_processes.signers<br>.custom_texts.dimensions.width | string<br>Float string which indicates the width of the custom text box. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the width of the custom text box to be half of the page’s width, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the x-coordinate of the custom text box for the entire box to be contained within the page) is less than 1. Note that if the business_processes.signers.custom_texts.descriptor is “Actual Date” or “Custom Date”, even though this value will be validated and stored, the stored value will not be used by Dedoco’s signing app because “Actual Date”s and “Custom Date”s are displayed in a fixed height:width ratio (1:4 specifically) using business_processes.signers.custom_texts.dimensions.height as reference.
+business_processes.signers<br>.custom_texts.dimensions.height | string<br>Float string which indicates the height of the custom text box. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the height of the custom text box to be half of the page’s height, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the y-coordinate of the custom text box for the entire box to be contained within the page) is less than 1.
 business_processes.completion_requirement.<br>min_number | number<br>Minimum number of signers who have signed for the business process to be ‘completed’. If the business process has a signing sequence defined, this number is expected to be equal to the total number of signers of the business process.
 
 Responses:
 
-> Body for code 201:
+> Response body for code 201:
 
 ```json
 {
@@ -392,7 +553,7 @@ Responses:
 }
 ```
 
-> Body for code 4xx: 
+> Response body for code 4xx: 
 
 ```json
 {
@@ -402,11 +563,11 @@ Responses:
 }
 ```
 
-> where statusCode is the status code of the error, 
-message is a string describing the cause of error 
-and error is a string describing the type of error.
+> where **statusCode** is the status code of the error,<br>
+**message** is a string describing the cause of error and<br>
+**error** is a string describing the type of error.
 
-> Body for code 5xx:
+> Response body for code 5xx:
 
 ```json
 {
@@ -416,9 +577,9 @@ and error is a string describing the type of error.
 }
 ```
 
-> where statusCode is the status code of the error,
-message is a string describing the cause of error
-and error is a string describing the type of error.
+> where **statusCode** is the status code of the error,<br>
+**message** is a string describing the cause of error and <br>
+**error** is a string describing the type of error.
 
 Code | Description
 -----|------------
@@ -426,7 +587,7 @@ Code | Description
 4xx | Errors caused by API consumers. Error codes such as 400, 401, 403 and 404 can be expected if incorrect requests are made to the API.
 5xx |Errors caused by the API provider or its dependencies. Error codes such as 500, 502 and 503 can be expected if there is an issue on the API side.
 
-> Links objects:
+> A **links** object:
 
 ```json
 {
@@ -445,21 +606,22 @@ Child attribute | Description
 folder | Folder<br>Folder object. Refer to Folders for more details.
 documents | Document[]<br>Array of Document objects. Refer to Documents for more details.
 businessProcesses | BusinessProcess[]<br>Array of BusinessProcess objects. Refer to Business Processes for more details.
-links | object[]<br>Array of objects containing information on the signing links for each signer involved.
+links | object[]<br>Array of objects. The structure of an object is given on the right. Contains information on the signing links for each signer involved.
 links.documentId | string<br>Id of the document the link attribute in the same object is for.
 links.documentName | string<br>Name of the document the link attribute in the same object is for.
 links.businessProcessId | string<br>Id of the business process the link attribute in the same object is for.
 links.signerId | string<br>Id of the signer the link attribute in the same object is for.
 links.signerName | string<br>Name of the signer the link attribute in the same object is for.
 links.signerEmail | string<br>Email of the signer the link attribute in the same object is for.
-links.link | string<br>The base URL of the signing link for the specified signer. To complete the signing link, append the base64 encoding of the file retrieval URL for Dedoco to retrieve the relevant file to sign on. The file retrieval URL should accept a GET request for Dedoco to retrieve the relevant file and should return a JSON object {file: string} where file is the base64 string of the retrieved pdf. For example, if the file retrieval URL is   “https://www.sample-url.com/path/file-id”, the base64 encoding would be “aHR0cHM6Ly93d3cuc2FtcGxlLXVybC5jb20vcGF0aC9maWxlLWlkIA==”. Appending “aHR0cHM6Ly93d3cuc2FtcGxlLXVybC5jb20vcGF0aC9maWxlLWlkIA==” to the base URL obtained from this request would complete the signing link. Note that the file retrieval URL appended should always be retrieving the most up-to-date (i.e. with signatures if there were previous signers) pdf. In the case of a business process with a signing sequence defined, the client should send out the links in the same sequence (even though Dedoco prevents a signer from signing before the previous signer has signed) and make sure that the appended URL retrieves the latest pdf with signatures (if any). And in the case of a business process where signers are allowed to sign simultaneously or in any order, the client can send out the links to all the signers at the same time but should make sure that the appended URL always retrieves the latest pdf with signatures (if any) so that the signers will receive the right pdf to sign on.
+links.link | string<br>The base URL of the signing link for the specified signer. To complete the signing link, append the base64 encoding of the file retrieval URL for Dedoco to retrieve the relevant file to sign on. The file retrieval URL should accept a GET request for Dedoco to retrieve the relevant file and should return a JSON object {file: string} where file is the base64 string of the retrieved pdf.<br>For example, if the file retrieval URL is   “https://www.sample-url.com/path/file-id”, the base64 encoding would be “aHR0cHM6Ly93d3cuc2FtcGxlLXVybC5jb20vcGF0aC9maWxlLWlkIA==”. Appending “aHR0cHM6Ly93d3cuc2FtcGxlLXVybC5jb20vcGF0aC9maWxlLWlkIA==” to the base URL obtained from this request would complete the signing link. Note that the file retrieval URL appended should always be retrieving the most up-to-date (i.e. with signatures if there were previous signers) pdf. In the case of a business process with a signing sequence defined, the client should send out the links in the same sequence (even though Dedoco prevents a signer from signing before the previous signer has signed) and make sure that the appended URL retrieves the latest pdf with signatures (if any). And in the case of a business process where signers are allowed to sign simultaneously or in any order, the client can send out the links to all the signers at the same time but should make sure that the appended URL always retrieves the latest pdf with signatures (if any) so that the signers will receive the right pdf to sign on.
 
 > Sample Request: 
 
 ```http
 POST https://beta-api.dedoco.com/api/v1/public/folders
-content-type: application/json
 Authorization: Bearer <token>
+content-type: application/json
+
 {
    "folder_name": "Test Folder",
    "date_created": 1616383852,
@@ -710,7 +872,6 @@ HTTP/1.1 201 Created
         "ce997dea6abb909f745de1aa18d26c7f99003233894876d6635a5d166c02862e"
       ],
       "business_processes": [
-
         "605d89b600f7ab4d00541d33"
       ],
       "status": "active",
@@ -719,7 +880,6 @@ HTTP/1.1 201 Created
         {
           "action": "create Document",
           "actor": {
-
             "id": "8b222cbb-06e3-4f9b-b79c-08cac27e8faa",
             "email": "jimmylee@gmail.com",
             "name": "Jim Lee"
@@ -794,7 +954,6 @@ HTTP/1.1 201 Created
           "esignatures": [
             {
               "placement": {
-
                 "page": 1,
                 "x": "0.6",
                 "y": "0.5"
@@ -882,13 +1041,11 @@ HTTP/1.1 201 Created
             {
               "type": "ndi",
               "placement": {
-
                 "page": 1,
                 "x": "0.6",
                 "y": "0.5"
               },
               "dimensions": {
-
                 "width": "0.01",
                 "height": "0.005"
               }
@@ -907,13 +1064,11 @@ HTTP/1.1 201 Created
             {
               "type": "ndi",
               "placement": {
-
                 "page": 1,
                 "x": "0.5",
                 "y": "0.5"
               },
               "dimensions": {
-
                 "width": "0.01",
                 "height": "0.005"
               }
@@ -945,7 +1100,6 @@ HTTP/1.1 201 Created
         }
       ],
       "completion_requirement": {
-
         "min_number": 2,
         "overriding_signers": []
       },
@@ -1005,8 +1159,11 @@ HTTP/1.1 201 Created
 }
 ```
 
-
+<aside class="success">
+A sample request and response are given on the right.
+</aside>
 
 # E. Documents
+
 
 # F. Business Processes
