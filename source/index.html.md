@@ -53,15 +53,15 @@ where jwt_token should be replaced with the obtained JWT token. The following se
 
 ## JWT Payload
 
-Attribute | Description
---- | ---
-subId | string<br>Id of the subject (i.e. client id).
-subTyp | string<br>Type of the subject. “public” in this case.
-usrName | string<br>Name of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
-usrEmail | string<br>Email address of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
-iat | number<br>Unix time the JWT token was issued at.
-exp | number<br>Unix time the JWT token will expire by.
-v | number<br>Version number of Dedoco’s API that generated the JWT token.
+Attribute | Type | Description
+----------|------|-------------
+subId | string | Id of the subject (i.e. client id).
+subTyp | string | Type of the subject. “public” in this case.
+usrName | string | Name of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
+usrEmail | string | Email address of the client’s user the client is requesting the JWT token on behalf of. This attribute will not exist if not provided in the Get JWT token endpoint.
+iat | number | Unix time the JWT token was issued at.
+exp | number | Unix time the JWT token will expire by.
+v | number | Version number of Dedoco’s API that generated the JWT token.
 
 ## Endpoints
 ### <a name="get-jwt-token"></a>1. Get JWT Token 
@@ -169,9 +169,9 @@ Code | Description
 4xx | Errors caused by API consumers. Error codes such as 400, 401, 403 and 404 can be expected if incorrect requests are made to the API.
 5xx | Errors caused by the API provider or its dependencies. Error codes such as 500, 502 and 503 can be expected if there is an issue on the API side.
 
-Child attribute | Description
-----------------|------------
-token | string<br>Base64 string of the encoded JWT token. Refer to JWT payload for more details.
+Child attribute | Type | Description
+----------------|------|-------------
+token | string | Base64 string of the encoded JWT token. Refer to JWT payload for more details.
 
 > Sample Request Header:
 
@@ -210,7 +210,7 @@ HTTP/1.1 201 Created
 A sample request and response are given on the right.
 </aside>
 
-# D. Folders
+# D. Folders<a name="folders"></a>
 Folders are used to group relevant document(s). A folder can have multiple documents but must contain at least one document. 
 
 ## Attributes
@@ -267,7 +267,7 @@ Header Parameter:
 
 Parameter | Type | Description | Required/Optional
 ----------|------|-------------|-------------------
-jwt_token | string | Token obtained by the client through the Get JWT Token endpoint. | Required
+jwt_token | string | Token obtained by the client through the [Get JWT Token](#get-jwt-token) endpoint. | Required
 
 Request Body:
 
@@ -512,9 +512,9 @@ business_processes.document_id | number | Index of the document in this request 
 business_processes.is_sequential | boolean | Boolean indicating if the business process requires signers to sign in a sequence. Note that signers have to sign in a sequence if digital signatures are used.
 business_processes.allow_download | boolean | Boolean indicating if the signers are allowed to manually download the signed pdf on Dedoco’s signing app after signing.
 business_processes.signers | object[] | Array of objects. The structure of an object is given on the right.
-business_processes.signers.signer_email | string | Email address of the signer.
-business_processes.signers.signer_name | string | Name of the signer.
-business_processes.signers.sequence_number | number | Sequence number of the signer if the business process requires signers to sign in a sequence. Starts from 1. 0 is used if there is no sequence.
+business_processes.signers<br>.signer_email | string | Email address of the signer.
+business_processes.signers<br>.signer_name | string | Name of the signer.
+business_processes.signers<br>.sequence_number | number | Sequence number of the signer if the business process requires signers to sign in a sequence. Starts from 1. 0 is used if there is no sequence.
 business_processes.signers<br>.esignatures | object[] | Array of objects. The structure of an object is given on the right.<br>Each object represents an electronic signature placeholder. An electronic signature, as opposed to a digital signature, is an image that is drawn, typed or uploaded by the signer. Use an empty array to indicate that electronic signature is not used.<br>Note that due to the nature of how a digital signature is computed, all signers of the same business process can only and have to sign either using electronic signatures or digital signatures.
 business_processes.signers<br>.esignatures.placement | object | Object containing information on where the electronic signature is placed on the file.
 business_processes.signers<br>.esignatures.placement.page | number | Page number of the page on which the electronic signature is placed. Starts from 1.
@@ -542,7 +542,7 @@ business_processes.signers<br>.custom_texts.placement.y | string | Float string 
 business_processes.signers<br>.custom_texts.dimensions | object | Object containing information on the size of the custom text on the file.
 business_processes.signers<br>.custom_texts.dimensions.width | string | Float string which indicates the width of the custom text box. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the width of the custom text box to be half of the page’s width, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the x-coordinate of the custom text box for the entire box to be contained within the page) is less than 1. Note that if the business_processes.signers.custom_texts.descriptor is “Actual Date” or “Custom Date”, even though this value will be validated and stored, the stored value will not be used by Dedoco’s signing app because “Actual Date”s and “Custom Date”s are displayed in a fixed height:width ratio (1:4 specifically) using business_processes.signers.custom_texts.dimensions.height as reference.
 business_processes.signers<br>.custom_texts.dimensions.height | string | Float string which indicates the height of the custom text box. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the height of the custom text box to be half of the page’s height, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the y-coordinate of the custom text box for the entire box to be contained within the page) is less than 1.
-business_processes.completion_requirement.<br>min_number | number | Minimum number of signers who have signed for the business process to be ‘completed’. If the business process has a signing sequence defined, this number is expected to be equal to the total number of signers of the business process.
+business_processes.<br>completion_requirement.min_number | number | Minimum number of signers who have signed for the business process to be ‘completed’. If the business process has a signing sequence defined, this number is expected to be equal to the total number of signers of the business process.
 
 Responses:
 
@@ -615,8 +615,8 @@ Code | Description
 
 Child attribute | Type | Description
 ----------------|------|-------------
-folder | Folder | Folder object. Refer to Folders for more details.
-documents | Document[] | Array of Document objects. Refer to Documents for more details.
+folder | Folder | Folder object. Refer to [Folders](#folders) for more details.
+documents | Document[] | Array of Document objects. Refer to [Documents](#documents) for more details.
 businessProcesses | BusinessProcess[] | Array of BusinessProcess objects. Refer to Business Processes for more details.
 links | object[] | Array of objects. The structure of an object is given on the right. Contains information on the signing links for each signer involved.
 links.documentId | string | Id of the document the link attribute in the same object is for.
@@ -1184,7 +1184,7 @@ HTTP/1.1 201 Created
 A sample request and response are given on the right.
 </aside>
 
-# E. Documents
+# E. Documents<a name="documents"></a>
 Documents are used to represent the uploaded files. A document can have zero to multiple business processes attached to it. 
 However, at any point in time, there can only be at most one “pending” business process attached to it. 
 
@@ -1241,7 +1241,7 @@ Header Parameter:
 
 Parameter | Type | Description | Required/Optional
 ----------|------|-------------|------------------
-jwt_token | string | Token obtained by the client through the [Get JWT Token](#getjwttoken) endpoint. | Required
+jwt_token | string | Token obtained by the client through the [Get JWT Token](#get-jwt-token) endpoint. | Required
 
 Request Body:
 
@@ -1304,50 +1304,207 @@ Request Body:
 Attribute | Type | Description | Required/Optional
 ----------|------|-------------|------------------
 document_name | string | Name of the document (not required to be the same as the original file name). Set by the document’s creator. | Required
-date_created | number | Date of the document's craetion in Unix time | Required
+date_created | number | Date of the document's creation in Unix time | Required
 file_type | string | File type of the document. Currently, only “pdf” is accepted. | Required
 document_hash | string | SHA3-256 hash of the document in hexadecimal. | Required
 parent_folder | string | Id of folder to add document to. | Required
 business_process | object | Object containing details of the business process to be added to the document. The structure of the object is shown on the right. | Optional
 
-Child Attribute | Description
-----------------|-------------
-business_process.type | 
-business_process.expiration_time | 
-business_process.is_sequential | 
-business_process.allow_download | 
-business_process.signers | 
-business_process.signers.<br>signer_email | 
-business_process.signers.<br>signer_name | 
-business_process.signers.<br>sequence_number | 
-business_process.signers.<br>esignatures | 
-business_process.signers.<br>esignatures.placement | 
-business_process.signers.<br>esignatures.placement.page | 
-business_process.signers.<br>esignatures.placement.x | 
-business_process.signers.<br>esignatures.placement.y | 
-business_process.signers.<br>esignatures.dimensions | 
-business_process.signers.<br>esignatures.dimensions.width | 
-business_process.signers.<br>esignatures.dimensions.height | 
-business_process.signers.<br>digi_signatures | 
-business_process.signers.<br>digi_signatures.type | 
-business_process.signers.<br>digi_signatures.placement | 
-business_process.signers.<br>digi_signatures.placement.page | 
-business_process.signers.<br>digi_signatures.placement.x | 
-business_process.signers.<br>digi_signatures.placement.y | 
-business_process.signers.<br>digi_signatures.dimensions | 
-business_process.signers.<br>digi_signatures.dimensions.width | 
-business_process.signers.<br>digi_signatures.dimensions.height | 
-business_process.signers.<br>custom_texts | 
-business_process.signers.<br>custom_texts.descriptor | 
-business_process.signers.<br>custom_texts.is_mandatory | 
-business_process.signers.<br>custom_texts.placement | 
-business_process.signers.<br>custom_texts.placement.page | 
-business_process.signers.<br>custom_texts.placement.x | 
-business_process.signers.<br>custom_texts.placement.y | 
-business_process.signers.<br>custom_texts.dimensions | 
-business_process.signers.<br>custom_texts.dimensions.width | 
-business_process.signers.<br>custom_texts.dimensions.height | 
-business_process.completion_requirement.min_number | 
+> A **business_process.signers** object:
+
+```json
+{
+    "signer_email": string,
+    "signer_name": string,
+    "sequence_number": number,
+    "esignatures": { 
+        "placement": { 
+            "page": number, 
+            "x": string, 
+            "y": string 
+        }, 
+        "dimensions": { 
+            "width": string, 
+            "height": string 
+        } 
+    }[],
+    "digi_signatures": { 
+        "type": string, 
+        "placement": { 
+            "page": number, 
+            "x": string, 
+            "y": string 
+        }, 
+        "dimensions": { 
+            "width": string, 
+            "height": string 
+        } 
+    }[],
+    "custom_texts": { 
+        "descriptor": string, 
+        "is_mandatory": boolean, 
+        "placement": { 
+            "page": number, 
+            "x": string, 
+            "y": string
+        }, 
+        "dimensions": { 
+            "width": string, 
+            "height": string 
+        } 
+    }[]
+}
+```
+
+> A **business_process.signers.esignatures** object:
+
+```json
+{ 
+    "placement": { 
+        "page": number, 
+        "x": string, 
+        "y": string 
+    }, 
+    "dimensions": { 
+        "width": string, 
+        "height": string 
+    } 
+}
+
+```
+
+> A **business_process.signers.esignatures.placement** object: 
+
+```json
+{ 
+    "page": number, 
+    "x": string, 
+    "y": string 
+}
+```
+
+> A **business_process.signers.esignatures.dimensions** object:
+
+```json
+{ 
+    "width": string, 
+    "height": string 
+} 
+``` 
+
+> A **business_process.signers.digi_signatures** object:
+
+```json
+{ 
+    "type": string,
+    "placement": { 
+        "page": number, 
+        "x": string, 
+        "y": string 
+    }, 
+    "dimensions": { 
+        "width": string, 
+        "height": string 
+    } 
+}
+```
+
+> A **business_process.signers.digi_signatures.placement** object:
+
+```json
+{ 
+    "page": number, 
+    "x": string, 
+    "y": string 
+}
+```
+
+> A **business_process.signers.digi_signatures.dimensions** object:
+
+```json
+{ 
+    "width": string, 
+    "height": string 
+}
+```
+
+> A **business_process.signers.custom_texts** object:
+
+```json
+{
+    "descriptor": string,
+    "is_mandatory": boolean,
+    "placement": { 
+        "page": number, 
+        "x": string, 
+        "y": string 
+    },
+    "dimensions": { 
+        "width": string, 
+        "height": string 
+    }
+}
+
+```
+
+> A **business_process.signers.custom_texts.placement** object:
+
+```json
+{ 
+    "page": number,
+    "x": string, 
+    "y": string 
+}
+
+```
+
+> A **business_process.signers.custom_texts.dimensions** object:
+
+```json
+{ 
+    "width": string, 
+    "height": string 
+}
+```
+
+Child Attribute | Type | Description
+----------------|------|-------------
+business_process.type | string | Currently, the only supported business process type is “signature”.
+business_process.expiration_time | string | Expiration time of the business process in Unix. Value must be higher than the current Unix time unless there is no expiration time. Use 0 if there is no expiration time.
+business_process.is_sequential | boolean | Boolean indicating if the business process requires signers to sign in a sequence.
+business_process.allow_download | boolean | Boolean indicating if the signers are allowed to manually download the signed pdf on Dedoco’s signing app after signing.
+business_process.signers | object[] | Array of objects containing details about the signers of the document. The structure of an object is given on the right.
+business_process.signers.<br>signer_email | string | Email address of the signer.
+business_process.signers.<br>signer_name | string | Name of the signer.
+business_process.signers.<br>sequence_number | number | Sequence number of the signer if the business process requires signers to sign in a sequence. Starts from 1. 0 is used if there is no sequence.
+business_process.signers.<br>esignatures | Array of objects. The structure of an object is given on the right.<br>Each object represents an electronic signature placeholder. An electronic signature, as opposed to a digital signature, is an image that is drawn, typed or uploaded by the signer. Use an empty array to indicate that electronic signature is not used. Note that due to the nature of how a digital signature is computed, all signers of the same business process can only and have to sign either using electronic signatures or digital signatures.
+business_process.signers.<br>esignatures.placement | object | Object containing information on where the electronic signature is placed on the file. Its structure is shown on the right.
+business_process.signers.<br>esignatures.placement.page | number | Page number of the page on which the electronic signature is placed. Starts from 1.
+business_process.signers.<br>esignatures.placement.x | string | Float string which indicates the horizontal distance the top left corner of the electronic signature box is from the left edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the placement of the electronic signature box’s top left corner to the center of the page horizontally, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the width of the electronic signature box for the entire signature box to be contained within the page) is strictly less than 1.
+business_process.signers.<br>esignatures.placement.y | string | Float string which indicates the vertical distance the top left corner of the electronic signature box is from the top edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the placement of the electronic signature box’s top left corner to the center of the page vertically, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the height of the electronic signature box for the entire signature box to be contained within the page) is strictly less than 1.
+business_process.signers.<br>esignatures.dimensions | object | Object containing information on the size of the electronic signature on the file. Its structure is shown on the right.
+business_process.signers.<br>esignatures.dimensions.width | string | Float string which indicates the width of the electronic signature box. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the width of the electronic signature box to be half of the page’s width, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the x-coordinate of the electronic signature box for the entire signature box to be contained within the page) is less than 1. Note that currently, even though this value will be validated and stored, the stored value will not be used by Dedoco’s signing app because electronic signatures are displayed in a fixed height:width ratio (1:2 specifically) using business_process.signers.esignatures.dimensions.height as reference.
+business_process.signers.<br>esignatures.dimensions.height | string | Float string which indicates the height of the electronic signature box. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the height of the electronic signature box to be half of the page’s height, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the y-coordinate of the electronic signature box for the entire signature box to be contained within the page) is less than 1.
+business_process.signers.<br>digi_signatures | object[] | Array of objects. The structure of an object is given on the right.<br>Each object represents a digital signature placeholder. A digital signature, as opposed to an electronic signature, is a signature derived cryptographically using the signer’s credentials. Use an empty array to indicate that digital signature is not used. Note that due to the nature of how a digital signature is computed, all signers of the same business process can only and have to sign either using electronic signatures or digital signatures.
+business_process.signers.<br>digi_signatures.type | string | Values could be “ndi” or “blockchain”. Currently, only “ndi” is supported. Note that only one “ndi” signature can be added for a signer.
+business_process.signers.<br>digi_signatures.placement | object | Object containing information on where the digital signature is placed on the file. Its structure is given on the right.
+business_process.signers.<br>digi_signatures.placement.page | number | Page number of the page on which the digital signature is placed. Starts from 1.
+business_process.signers.<br>digi_signatures.placement.x | string | Float string which indicates the horizontal distance the top left corner of the digital signature box is from the left edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the placement of the electronic signature box’s top left corner to the center of the page horizontally, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the width of the electronic signature box for the entire signature box to be contained within the page) is strictly less than 1.
+business_process.signers.<br>digi_signatures.placement.y | string | Float string which indicates the vertical distance the top left corner of the electronic signature box is from the top edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the placement of the electronic signature box’s top left corner to the center of the page vertically, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the height of the electronic signature box for the entire signature box to be contained within the page) is strictly less than 1.
+business_process.signers.<br>digi_signatures.dimensions | object| Object containing information on the size of the digital signature on the file. Its structure is given on the right.
+business_process.signers.<br>digi_signatures.dimensions.width | string | Float string which indicates the width of the digital signature box. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the width of the digital signature box to be half of the page’s width, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the x-coordinate of the digital signature box for the entire signature box to be contained within the page) is less than 1. Note that currently, even though this value will be stored, the stored value will not be used by Dedoco’s signing app because only “ndi” digital signatures are supported and their sizes are fixed.
+business_process.signers.<br>digi_signatures.dimensions.height | string | Float string which indicates the height of the digital signature box. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the height of the digital signature box to be half of the page’s height, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the y-coordinate of the digital signature box for the entire signature box to be contained within the page) is less than 1. Note that currently, even though this value will be stored, the stored value will not be used by Dedoco’s signing app because only “ndi” digital signatures are supported and their sizes are fixed.
+business_process.signers.<br>custom_texts | object[] | Array of objects. The structure of an object is given on the right.<br>Note that due to the nature of how a digital signature is computed, there cannot be custom texts if the business process has more than one signers and “ndi” digital signatures are used (i.e. an empty array is expected).
+business_process.signers.<br>custom_texts.descriptor | string | Brief description of custom text. Helps the signer know what to fill into the custom text field. If any of the special values is used, the custom text field will be displayed in the signing app differently from a typical custom text field. Currently, the special values are the strings “Actual Date” and “Custom Date”. If “Actual Date” is used, the signing app will generate the signer’s current date within the custom text box when the signer accesses the signing link (i.e. the signer does not get to edit the value of the custom text). If “Custom Date” is used, the signing app will display a calendar for the signer to choose a date.
+business_process.signers.<br>custom_texts.is_mandatory | boolean | Boolean indicating whether or not filling in the custom text is mandatory.
+business_process.signers.<br>custom_texts.placement | object | Object containing information on where the custom text is placed on the file. Its structure is given on the right.
+business_process.signers.<br>custom_texts.placement.page | number | Page number of the page on which the custom text is placed. Starts from 1.
+business_process.signers.<br>custom_texts.placement.x | string | Float string which indicates the horizontal distance the top left corner of the custom text box is from the left edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the placement of the custom text box’s top left corner to the center of the page horizontally, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the width of the custom text box for the entire box to be contained within the page) is strictly less than 1.
+business_process.signers.<br>custom_texts.placement.y | string | Float string which indicates the vertical distance the top left corner of the custom text box is from the top edge of the page. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the placement of the custom text box’s top left corner to the center of the page vertically, a float string of “0.5” should be used. Minimum represented float value is 0 and maximum represented float value (depends on the height of the custom text box for the entire box to be contained within the page) is strictly less than 1.
+business_process.signers.<br>custom_texts.dimensions | object | Object containing information on the size of the custom text on the file. Its structure is given on the right.
+business_process.signers.<br>custom_texts.dimensions.width | string | Float string which indicates the width of the custom text box. The represented float value is a fraction (in decimal form) whose denominator is the width of the page.<br>For example, to set the width of the custom text box to be half of the page’s width, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the x-coordinate of the custom text box for the entire box to be contained within the page) is less than 1. Note that if the business_process.signers.custom_texts.descriptor is “Actual Date” or “Custom Date”, even though this value will be validated and stored, the stored value will not be used by Dedoco’s signing app because “Actual Date”s and “Custom Date”s are displayed in a fixed height:width ratio (1:4 specifically) using business_process.signers.custom_texts.dimensions.height as reference.
+business_process.signers.<br>custom_texts.dimensions.height | string | Float string which indicates the height of the custom text box. The represented float value is a fraction (in decimal form) whose denominator is the height of the page.<br>For example, to set the height of the custom text box to be half of the page’s height, a float string of “0.5” should be used. Minimum represented float value is strictly more than 0 and maximum represented float value (depends on the y-coordinate of the custom text box for the entire box to be contained within the page) is less than 1.
+business_process.completion_requirement.min_number | number | Minimum number of signers who have signed for the business process to be ‘completed’. If the business process has a signing sequence defined, this number is expected to be equal to the total number of signers of the business process.
 
 Responses: 
 
@@ -1365,7 +1522,7 @@ Responses:
       "signerName": string,
       "signerEmail": string,
       "link": string
-    }[ ]
+    }[]
 }
 ```
 
