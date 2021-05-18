@@ -2,7 +2,7 @@
 Documents are used to represent the uploaded files. A document can have zero to multiple business processes attached to it. 
 However, at any point in time, there can only be at most one “pending” business process attached to it. 
 
-## Attributes
+## Document Attributes
 
 > A **history** object:
 

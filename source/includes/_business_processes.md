@@ -3,7 +3,7 @@
 Business processes are used to represent processes involving files, that are usually conducted in a corporate setting, such as signing of files. 
 A business process stores information on the entire flow of the process and other information essential to generate the final output of the process.
 
-## Attributes
+## Business Process Attributes
 
 > A **signers** object:
 

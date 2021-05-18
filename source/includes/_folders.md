@@ -1,7 +1,7 @@
 # D. Folders<a name="folders"></a>
 Folders are used to group relevant document(s). A folder can have multiple documents but must contain at least one document. 
 
-## Attributes
+## Folder Attributes
 
 Attribute | Type | Description
 ----------|------|-------------
