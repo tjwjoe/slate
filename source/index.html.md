@@ -1552,11 +1552,26 @@ Code | Description
 4xx | Errors caused by API consumers. Error codes such as 400, 401, 403 and 404 can be expected if incorrect requests are made to the API.
 5xx | Errors caused by the API provider or its dependencies. Error codes such as 500, 502 and 503 can be expected if there is an issue on the API side.
 
+> A **links** object:
+
+```json
+{
+    "documentId": string,
+    "documentName": string,
+    "businessProcessId": string,
+    "signerId": string,
+    "signerName": string,
+    "signerEmail": string,
+    "link": string
+}
+
+```
+
 Child Attribute | Type | Description
 ----------------|------|-------------
 document | Document | A Document object. Refer to Documents for more details.
 businessProcess | BusinessProcess | A BusinessProcess object. Refer to Business Processes for more details.
-links | object[] | 
+links | object[] | Array of objects containing information on the signing links for each signer involved. The structure of an object is given on the right.
 links.documentId | string | Id of the document the link attribute in the same object is for.
 links.documentName | string | Name of the document the link attribute in the same object is for.
 links.businessProcessId | string | Id of the business process the link attribute in the same object is for.
