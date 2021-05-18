@@ -1578,7 +1578,277 @@ links.businessProcessId | string | Id of the business process the link attribute
 links.signerId | string | Id of the signer the link attribute in the same object is for.
 links.signerName | string | Name of the signer the link attribute in the same object is for.
 links.signerEmail | string | Email of the signer the link attribute in the same object is for.
-links.link | string | The base URL of the signing link for the specified signer. To complete the signing link, append the base64 encoding of the file retrieval URL for Dedoco to retrieve the relevant file to sign on. The file retrieval URL should accept a GET request for Dedoco to retrieve the relevant file and should return a JSON object { file: string } where file is the base64 string of the retrieved pdf. <br>For example, if the file retrieval URL is “https://www.sample-url.com/path/file-id”, the base64 encoding would be “aHR0cHM6Ly93d3cuc2FtcGxlLXVybC5jb20vcGF0aC9maWxlLWlkIA==”. Appending “aHR0cHM6Ly93d3cuc2FtcGxlLXVybC5jb20vcGF0aC9maWxlLWlkIA==” to the base URL obtained from this request would complete the signing link.<br>Note that the file retrieval URL appended should always be retrieving the most up-to-date (i.e. with signatures if there were previous signers) pdf. In the case of a business process with a signing sequence defined, the client should send out the links in the same sequence (even though Dedoco prevents a signer from signing before the previous signer has signed) and make sure that the appended URL retrieves the latest pdf with signatures (if any). And in the case of a business process where signers are allowed to sign simultaneously or in any order, the client can send out the links to all the signers at the same time but should make sure that the appended URL always retrieves the latest pdf with signatures (if any) so that the signers will receive the right pdf to sign on.
+links.link | string | The base URL of the signing link for the specified signer. To complete the signing link, append the base64 encoding of the file retrieval URL for Dedoco to retrieve the relevant file to sign on. The file retrieval URL should accept a GET request for Dedoco to retrieve the relevant file and should return a JSON object { file: string } where file is the base64 string of the retrieved pdf.<br>For example, if the file retrieval URL is “https://www.sample-url.com/path/file-id”, the base64 encoding would be “aHR0cHM6Ly93d3cuc2FtcGxlLXVybC5jb20vcGF0aC9maWxlLWlkIA==”. Appending “aHR0cHM6Ly93d3cuc2FtcGxlLXVybC5jb20vcGF0aC9maWxlLWlkIA==” to the base URL obtained from this request would complete the signing link.<br>Note that the file retrieval URL appended should always be retrieving the most up-to-date (i.e. with signatures if there were previous signers) pdf. In the case of a business process with a signing sequence defined, the client should send out the links in the same sequence (even though Dedoco prevents a signer from signing before the previous signer has signed) and make sure that the appended URL retrieves the latest pdf with signatures (if any). And in the case of a business process where signers are allowed to sign simultaneously or in any order, the client can send out the links to all the signers at the same time but should make sure that the appended URL always retrieves the latest pdf with signatures (if any) so that the signers will receive the right pdf to sign on.
 
+> Sample request header:
+
+```http
+POST https://beta-api.dedoco.com/api/v1/public/documents HTTP/1.1
+content-type: application/json
+Authorization: Bearer <token>
+```
+
+> Sample request body:
+
+```json
+{
+   "document_name": "sample_pdf",
+   "date_created": 1616387681,
+   "file_type": "pdf",
+   "document_hash": "45c6fca6181822fe43912280bedd1f5766174ed69abd3b74cd3c3c0fbb8fe2e8",
+   "parent_folder": "60581dbbc79151135ddd6b57",
+   "business_process": {
+       "type": "signature",
+       "expiration_time": 0,
+       "is_sequential": false,
+       "allow_download": true,
+       "signers": [
+           {
+               "signer_email": "alicia@gmail.com",
+               "signer_name": "Alicia Macaron",
+               "sequence_number": 0,
+               "esignatures": [
+                   {
+                       "placement": {
+                           "page": 1,
+                           "x": "0.5",
+                           "y": "0.5"
+                       },
+                       "dimensions": {
+                           "width": "0.01",
+                           "height": "0.005"
+                       }
+                   }
+               ],
+               "digi_signatures": [],
+               "custom_texts": []
+           }
+       ],
+       "completion_requirement": {
+           "min_number": 1
+       }
+   }
+}
+```
+
+> Sample response header:
+
+```http
+Sample Response:
+HTTP/1.1 201 Created
+```
+
+> Sample response body:
+
+```json
+{
+  "document": {
+    "id": "605d8bdf00f7ab4d00541d3b",
+    "name": "sample_pdf",
+    "file_type": "pdf",
+    "date_created": "2021-03-22T04:34:41.000Z",
+    "document_hashes": [
+      "45c6fca6181822fe43912280bedd1f5766174ed69abd3b74cd3c3c0fbb8fe2e8"
+    ],
+    "business_processes": [
+      "605d8bdf00f7ab4d00541d3c"
+    ],
+    "status": "active",
+    "parent_folder": "60581dbbc79151135ddd6b57",
+    "history": [
+      {
+        "action": "create Document",
+        "actor": {
+          "id": "8b222cbb-06e3-4f9b-b79c-08cac27e8faa",
+          "email": "jimmylee@gmail.com",
+          "name": "Jim Lee"
+        },
+        "timestamp": "2021-03-22T04:34:41.000Z",
+        "transaction_hash": ""
+      },
+      {
+        "action": "add Business Process (Signature) with id: 605d8bdf00f7ab4d00541d3c",
+        "actor": {
+          "id": "8b222cbb-06e3-4f9b-b79c-08cac27e8faa",
+          "email": "jimmylee@gmail.com",
+          "name": "Jim Lee"
+        },
+        "timestamp": "2021-03-22T04:34:41.000Z",
+        "transaction_hash": ""
+      }
+    ]
+  },
+  "businessProcess": {
+    "id": "605d8bdf00f7ab4d00541d3c",
+    "type": "signature",
+    "date_created": "2021-03-22T04:34:41.000Z",
+    "expiration_time": "1970-01-01T00:00:00.000Z",
+    "document_id": "605d8bdf00f7ab4d00541d3b",
+    "allow_download": true,
+    "signers": [
+      {
+        "has_signed": false,
+        "signer_id": "SIG_605d8bdf00f7ab4d00541d3d",
+        "signer_name": "Alicia Macaron",
+        "signer_email": "alicia@gmail.com",
+        "sequence_number": 0,
+        "esignatures": [
+          {
+            "placement": {
+              "page": 1,
+              "x": "0.5",
+              "y": "0.5"
+            },
+            "dimensions": {
+              "width": "0.01",
+              "height": "0.005"
+            }
+          }
+        ],
+        "digi_signatures": [],
+        "custom_texts": []
+      }
+    ],
+    "sequential_requirement": [],
+    "completion_requirement": {
+      "min_number": 1,
+      "overriding_signers": []
+    },
+    "status": "pending",
+    "history": [
+      {
+        "action": "create Business Process (Signature)",
+        "actor": {
+          "id": "8b222cbb-06e3-4f9b-b79c-08cac27e8faa",
+          "email": "jimmylee@gmail.com",
+          "name": "Jim Lee"
+        },
+        "timestamp": "2021-03-22T04:34:41.000Z",
+        "transaction_hash": ""
+      }
+    ]
+  },
+  "links": [
+    {
+      "documentId": "605d8bdf00f7ab4d00541d3b",
+      "documentName": "sample_pdf",
+      "businessProcessId": "605d8bdf00f7ab4d00541d3c",
+      "signerId": "SIG_605d8bdf00f7ab4d00541d3d",
+      "signerName": "Alicia Macaron",
+      "signerEmail": "alicia@gmail.com",
+      "link": "https://sample-url.com/public/sign/605d8bdf00f7ab4d00541d3c/SIG_605d8bdf00f7ab4d00541d3d"
+    }
+  ]
+}
+```
+
+<aside class="success">
+A sample request and response are given on the right.
+</aside>
+
+### 2. Void Document
+PUT /public/documents/{document_id}/status HTTP/1.1<br>
+Changes a document’s status to “voided”. Statuses of attached business processes will also be changed to “voided”. 
+“voided” status indicates that the document is invalid and cannot be edited anymore. 
+
+<aside class="notice">
+Only the owner of the document is authorised to make the request. 
+</aside>
+
+<aside class="warning">
+WARNING: this action is irreversible!
+</aside>
+
+Authorization:<br>
+Bearer <jwt_token>
+
+Header Parameter:
+
+Parameter | Type | Description | Required/Optional
+----------|------|-------------|-------------------
+jwt_token | string | Token obtained by the client through the [Get JWT Token](#get-jwt-token) endpoint. | Required
+
+Path Parameter:
+
+Parameter | Type | Description | Required/Optional
+----------|------|-------------|-------------------
+document_id | string | Id of the document to void. | Required
+
+Request Body:
+
+Attribute | Type | Description | Required/Optional
+----------|------|-------------|--------------------
+value | string | New status of the document to change to. Only the value “voided” is accepted. | Required
+request_date | number | Date of request in Unix time. | Required
+
+Responses:
+
+> Response body for code 4xx:
+
+```json
+{
+  "statusCode": number,
+  "message": string,
+  "error": string 
+}
+
+```
+
+> where **statusCode** is the status code of the error, 
+**message** is a string describing the cause of error and 
+**error** is a string describing the type of error.
+
+> Response body for code 5xx: 
+
+```json
+{
+    "statusCode": number,
+    "message": string,
+    "error": string 
+}
+
+```
+
+> where **statusCode** is the status code of the error, 
+**message** is a string describing the cause of error and 
+**error** is a string describing the type of error.
+
+Code | Description
+-----|-------------
+201 | Document has been successfully voided. Returns an empty JSON object `{ }` as its body.
+4xx | Errors caused by API consumers. Error codes such as 400, 401, 403 and 404 can be expected if incorrect requests are made to the API.
+5xx | Errors caused by the API provider or its dependencies. Error codes such as 500, 502 and 503 can be expected if there is an issue on the API side.
+
+> Sample request header:
+
+```http
+PUT https://beta-api.dedoco.com/api/v1/60581f41c79151135ddd6b65/status HTTP/1.1
+content-type: application/json
+Authorization: Bearer <token>
+
+``` 
+
+> Sample request body: 
+
+```json
+{
+   "status": "voided",
+   "request_date": 1616388028
+}
+
+```
+
+> Sample response header:
+
+```http
+HTTP/1.1 200 OK
+```
+
+> Sample response body: 
+
+```json
+{ }
+```
 
 # F. Business Processes
+
