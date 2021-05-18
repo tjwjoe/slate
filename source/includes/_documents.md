@@ -54,7 +54,7 @@ Header Parameter:
 
 Parameter | Type | Description | Required/Optional
 ----------|------|-------------|------------------
-jwt_token | string | Token obtained by the client through the [Get JWT Token](#get-jwt-token) endpoint. | Required
+jwt_token | string | Token obtained by the client through the Get JWT Token endpoint. | Required
 
 Request Body:
 
@@ -382,8 +382,8 @@ Code | Description
 
 Child Attribute | Type | Description
 ----------------|------|-------------
-document | Document | A Document object. Refer to [Documents](#documents) for more details.
-businessProcess | BusinessProcess | A BusinessProcess object. Refer to [Business Processes](#business-processes) for more details.
+document | Document | A Document object. Refer to Documents for more details.
+businessProcess | BusinessProcess | A BusinessProcess object. Refer to Business Processes for more details.
 links | object[] | Array of objects containing information on the signing links for each signer involved. The structure of an object is given on the right.
 links.documentId | string | Id of the document the link attribute in the same object is for.
 links.documentName | string | Name of the document the link attribute in the same object is for.
@@ -580,7 +580,7 @@ Header Parameter:
 
 Parameter | Type | Description | Required/Optional
 ----------|------|-------------|-------------------
-jwt_token | string | Token obtained by the client through the [Get JWT Token](#get-jwt-token) endpoint. | Required
+jwt_token | string | Token obtained by the client through the Get JWT Token endpoint. | Required
 
 Path Parameter:
 

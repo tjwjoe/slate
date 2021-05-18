@@ -56,7 +56,7 @@ Header Parameter:
 
 Parameter | Type | Description | Required/Optional
 ----------|------|-------------|-------------------
-jwt_token | string | Token obtained by the client through the [Get JWT Token](#get-jwt-token) endpoint. | Required
+jwt_token | string | Token obtained by the client through the Get JWT Token endpoint. | Required
 
 Request Body:
 
@@ -404,8 +404,8 @@ Code | Description
 
 Child attribute | Type | Description
 ----------------|------|-------------
-folder | Folder | Folder object. Refer to [Folders](#folders) for more details.
-documents | Document[] | Array of Document objects. Refer to [Documents](#documents) for more details.
+folder | Folder | Folder object. Refer to Folders for more details.
+documents | Document[] | Array of Document objects. Refer to Documents for more details.
 businessProcesses | BusinessProcess[] | Array of BusinessProcess objects. Refer to Business Processes for more details.
 links | object[] | Array of objects. The structure of an object is given on the right. Contains information on the signing links for each signer involved.
 links.documentId | string | Id of the document the link attribute in the same object is for.

@@ -327,7 +327,7 @@ Header Parameter:
 
 Parameter | Type | Description | Required/Optional
 ----------|------|-------------|-------------------
-jwt_token | string | Token obtained by the client through the [Get JWT Token](#get-jwt-token) endpoint. | Required
+jwt_token | string | Token obtained by the client through the Get JWT Token endpoint. | Required
 
 Path Parameter: 
 
