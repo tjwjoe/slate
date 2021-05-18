@@ -87,7 +87,7 @@ Request Body:
         "placement": { 
           "page": number, 
           "x": string, 
-          "y": string"
+          "y": string
         }, 
         "dimensions": { 
           "width": string, 
