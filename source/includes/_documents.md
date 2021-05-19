@@ -608,8 +608,8 @@ Responses:
 
 ```
 
-> where **statusCode** is the status code of the error, 
-**message** is a string describing the cause of error and 
+> where **statusCode** is the status code of the error,<br>
+**message** is a string describing the cause of error and<br>
 **error** is a string describing the type of error.
 
 > Response body for code 5xx: 
@@ -623,8 +623,8 @@ Responses:
 
 ```
 
-> where **statusCode** is the status code of the error, 
-**message** is a string describing the cause of error and 
+> where **statusCode** is the status code of the error,<br>
+**message** is a string describing the cause of error and<br>
 **error** is a string describing the type of error.
 
 Code | Description
@@ -663,3 +663,7 @@ HTTP/1.1 200 OK
 ```json
 { }
 ```
+
+<aside class="success">
+A sample request and response are given on the right.
+</aside>
